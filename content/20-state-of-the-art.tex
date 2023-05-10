@@ -5,15 +5,40 @@
 Questions to ask:
 \begin{enumerate}
     \item What is generally known about the topic? (relevant theory)
-    \item What have other researchers recently done in this topic?
-    \item What are the findings and follow up recommendations of previous work?
-    \item What is the research gap that will be filled by this work?
+    \item What are the most important (recent) existing works in the field related to the research problem? 
+    \item What are the limitations or gaps in the existing works that this work aims to address? 
+    \item How does this work build upon or differ from existing works? 
+    \item What are the main research approaches or techniques used in the field, and how do they relate to this work? 
+    \item What are the main challenges or open questions in the field? 
 \end{enumerate}
 
+General theory:
 \begin{enumerate}
-    \item ROS2 Nav Stack multi-story
+    \item Path planning
+    \item Astar, RRT, Dijkstra, PRM
+    \item Hierarchical graphs
+    \item ROS2 Nav Stack
     \item OpenRMF
-    \item Paper IAS 17 on Hierarchical graphs Zagreb
-    \item Paper skeletonized-informed RRT
-    \item Porblems of these papers and my own improvements
+\end{enumerate}
+
+Other approaches to Q1 (Navigate in large multi-story environments):
+\begin{enumerate}
+    \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments
+    \item Paper Hierarchical Path-Planning for Mobile Robots Using a Skeletonization-Informed Rapidly Exploring Random Tree*
+\end{enumerate}
+
+Other approaches to Q2 (Plan paths that are straight, deterministic and human-predictable):
+\begin{enumerate}
+    \item Voronoi Diagrams, EVG (with sensory horizont)
+    \item Smoothing algorithms (Bezier curves, B-Splines, Bechtold and Glavina, Latombe)
+    \item Paper Straight Skeleton Based Automatic Generation of Hierarchical Topological Map in Indoor Environment
+\end{enumerate}
+
+Research gap from previous approaches:
+\begin{enumerate}
+    \item Hierarchical graphs are not per room or per floor which makes it difficult to append slamed maps or semantic information
+    \item Hierarchical graphs are not used in ROS2 Nav Stack
+    \item Approaches for straight paths are not deterministic and not human-predictable
+    \item Approaches for straight paths are not implemented in ROS2 Nav Stack
+    \item Approaches for straight paths only work well in small corridors
 \end{enumerate}
