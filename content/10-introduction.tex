@@ -1,17 +1,3 @@
-% \newacronym{iras}{iRAS}{Institute for Robotics and Autonomous Systems}
-\newacronym{ros}{ROS}{Robot Operating System}
-\newacronym{ros_2}{ROS 2}{Robot Operating System 2}
-\newacronym{petra}{PeTRA}{Personen-Transfer Roboter-Assistent}
-\newacronym[plural=BTs,firstplural=Behavior Trees (BTs)]{bt}{BT}{Behavior Tree}
-\newacronym[plural=FSMs,firstplural=Finite-State Machines (FSMs)]{fsm}{FSM}{Finite-State Machine}
-\newacronym[plural=HFSMs,firstplural=Hierarchical Finite-State Machines (HFSMs)]{hfsm}{HFSM}{Hierarchical Finite-State Machine}
-\newacronym{osrf}{OSRF}{Open Source Robotics Foundation}
-\newacronym{slam}{SLAM}{Simultaneous Localization and Mapping}
-\newacronym{uml}{UML}{Unified Modeling Language}
-\newacronym{xml}{xml}{Extensible Markup Language}
-\newacronym{lidar}{LIDAR}{Light Detection and Ranging}
-\newacronym[plural=H-Graphs,firstplural=Hierarchical Graphs]{h_graph}{H-Graph}{Hierarchical Graph}
-
 %% ==============================
 \chapter{Introduction}
 \label{sec:introduction}
@@ -36,8 +22,21 @@ Questions to ask:
     \item Structure of the thesis
 \end{enumerate}
 
+%% ==============================
+\section{Motivation}
+\label{sec:motivation}
+%% ==============================
+The research area of autonomous mobile robotics deals with all sub-areas that are necessary to ensure the required degree of autonomy and mobility for specific tasks. In addition to navigation and manipulation, this also includes the perception of the environment as well as the internal state. Autonomous mobile robots form a combination of the disciplines of electrical engineering, mechanical engineering and computer science. Computer science in particular is rapidly driving current developments. Complex algorithms for localisation and navigation enable the necessary mobility. Artificial intelligence offers robust methods for image processing, object recognition and voice control through neural networks and machine learning. \todo{Quelle überpüfen und aktualisieren} According to the market research company Gartner, autonomous robotics is the most important strategic technological trend of 2019 \cite{Cearley.2018} and number eight in 2020 \todo{Quelle} In recent years it has only been superseded by new developments in the field of AI. The market for service robots is also growing rapidly. \todo{Quelle aktualisieren} According to the International Federation of Robotics, the market volume for service robots in 2018 was 9.2 billion US dollars \cite{InternationalFederationofRobotics.2019}. The market volume is expected to grow to 46.2 billion US dollars by 2025 \cite{InternationalFederationofRobotics.2019}.
+
+Especially in the application area of service robotics, tasks are becoming increasingly complex. The best-known are household robots that, for example, take care of vacuuming or mow the lawn. However, more extensive tasks such as support in everyday life by folding the laundry \todo{Quelle}, for example, can now also be taken over by assistance robots. The commercial application of service robots is mostly limited to isolated tasks without the need to interact with humans or robots that operate in strictly defined spaces separted from humans, for example robots for material logistics in warehouses or production facilities. There are af few start-ups which are trying to establish service robots in public spaces as well. However, the development of service robots for public spaces is still in its infancy. The main reason for this is the complexity of the tasks and the environment. In addition to the technical challenges, there are also legal and ethical issues that need to be addressed.
+
+The use case of this work is a mobile robot that is used to support patient logistics in care facilities. This includes tasks such as delivering medicines and transporting a patient to their examiniations. This work is part of the \gls{petra} research project, which aims to develop a mobile robot for autonomously transporting patients in a hospital and completing other service tasks. \gls{petra} is funded by the \gls{bmbf} and developed at the \gls{iras} of the \gls{hka}.
 
 
+%% ==============================
+\section{Problem Statement}
+\label{sec:problem_statement}
+%% ==============================
 Mobile robots are increasingly being used in large environments, such as hospitals, to improve efficiency and reduce human workload. However, navigating over multiple stories poses a significant challenge for mobile robots, as it requires a planner that can account for complex spatial configurations and still find the shortest path. Moreover, the planned path must be straight, deterministic and predictable for humans who could be walking in the same space as the robot. Therefore, the specific research problem addressed in this thesis is the development of a planner that can enable a mobile robot to navigate over multiple stories in large environments, while ensuring a straight, deterministic and human-predictable path. 
 
 The ability to navigate over multiple stories is important for mobile robots in large environments, as it can significantly increase their utility and effectiveness. For instance, in hospitals, mobile robots could be used for tasks such as delivering medicines, transporting equipment, or guiding patients and visitors. Although for specific use-cases proprietary solutions exist, the lack of an open-source planner for multi-story navigation is a major bottleneck in the development of mobile robots for service applications. Moreover, the need for a straight, deterministic and human-predictable path is essential for ensuring safety and reducing the risk of collisions or accidents in shared human-robot spaces.
@@ -48,18 +47,10 @@ The two main research questions addressed in this thesis are:
     \item How to plan paths that are straight, deterministic and human-predictable?
 \end{enumerate}
 
-The scope of this work is limited to developing a planner which plans apriori with previously gathered information, in contrast to a controller which follows the planned path and adapts to dynamic obstacles. The main assumption is that the a map of the whole environment is previously recorded and provides a complete representation of the plannable space. The planner is implemented as a plugin for the \gls{ros_2} and is evaluated using realistic simulation scenarios and real-world experiments. The planner is designed to be modular and can be easily integrated with the existing navigation stack. The planner is also designed to be scalable and can be used in environments of varying sizes and complexity.
+The scope of this work is limited to developing a planner which plans a priori with previously gathered information, in contrast to a controller which follows the planned path and adapts to dynamic obstacles. The main assumption is that the a map of the whole environment is previously recorded and provides a complete representation of the plannable space.
 
-The main contributions of this thesis are:
-\begin{itemize}
-    \item A novel hierarchical planner for multi-story navigation in arbitrarily large environments
-    \item A novel 2D planner which is able to generate straight, deterministic and human-predictable paths.
-    \item A new metric to measure the disturbance of a path on shared human-robot spaces.
-    \item A comparative analysis of different planners in respect to the proposed metric.
-    \item A comprehensive evaluation of the proposed planner using realistic simulation scenarios.
-    \item A proof-of-concept implementation of the planner on a real robot using \gls{ros_2} and \gls{bt}.
-\end{itemize}
-
-While the developed 2D planner is extensively evaluated in a simple 2D environment, the hierarchical planner is tested in a 3D simulation with a realistic environment. One example use-case for multi-story navigation are service applications in a hospital. This includes tasks such as delivering medicines and transporting a patient to their examiniations. This work is part of the \gls{petra} research project, which aims to develop a mobile robot for autonomously transporting patients in a hospital and completing other service tasks. As final proof-of-concept, the planner is implemented on the \gls{petra} robot and tested in a real-world hospital.
-
-The following work is structured as follows: Chapter \ref{sec:state_of_the_art} provides an overview of the state of the art in the field of multi-story path planning for mobile robots. It also discusses the limitations of existing approaches. Chapter \ref{sec:methods} describes the methodology used to address the research questions. The concept of the planner which are \glspl{h_graph} is presented in Chapter \ref{sec:concept} followed by the implementation in Chapter \ref{sec:implementation}. This shows the approaches of creating a \gls{h_graph} from a previously recorded map. Chapter \ref{sec:results} presents the results of the work. Chapter \ref{sec:discussion} discusses the results and provides recommendations for future work. Chapter \ref{sec:conclusion} concludes the thesis.
+%% ==============================
+\section{Structure of the Thesis}
+\label{sec:structure}
+%% ==============================
+The following work is structured as follows: Chapter \ref{sec:state_of_the_art} provides an overview of the state of the art in the field of multi-story path planning for mobile robots. It also discusses the limitations of existing approaches. Chapter \ref{sec:methods} describes the methodology used to address the research questions. The concept of the graph-based planner is presented in Chapter \ref{sec:concept} followed by the implementation in Chapter \ref{sec:implementation}. This shows the approaches of creating a graph from a previously recorded map. Chapter \ref{sec:results} presents the results of the work. Chapter \ref{sec:discussion} discusses the results and provides recommendations for future work. Chapter \ref{sec:conclusion} concludes the thesis.
