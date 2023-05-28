@@ -56,7 +56,7 @@ Planning a path is a major challenge in robotics and is necessary for mobility. 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figures/02_state_of_the_art/ros_equation.png}
-    \caption{The ROS equation: ROS = Plumbing + Tools + Capabilities + Community (Source: \cite{OpenRobotics_About.2020})}
+    \caption[The ROS equation]{The ROS equation: ROS = Plumbing + Tools + Capabilities + Community (Source: \cite{OpenRobotics_About.2020})}
     \label{fig:ros_equation}
 \end{figure}
 
@@ -67,7 +67,7 @@ Nodes are the basis of the distributed network of an ROS application. The nodes 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/topics.pdf}
-    \caption{The structure of a topic}
+    \caption{The structure of a ROS topic}
     \label{fig:topics}
 \end{figure}
 
@@ -76,7 +76,7 @@ The individual nodes communicate through message channels about a specific topic
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/services.pdf}
-    \caption{The structure of a service}
+    \caption{The structure of a ROS service}
     \label{fig:services}
 \end{figure}
 
@@ -85,7 +85,7 @@ Services are based on the call-and-response model. This means that, unlike topic
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/actions.pdf}
-    \caption{The structure of an action}
+    \caption{The structure of a ROS action}
     \label{fig:actions}
 \end{figure}
 
@@ -118,7 +118,7 @@ The Navigation2 stack for \gls{ros_2} is a comprehensive framework for the devel
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_architecture.png}
-    \caption{The architecture of the Nav2 stack (Source: \cite{https://navigation.ros.org/})}
+    \caption[The architecture of the Nav2 stack]{The architecture of the Nav2 stack (Source: \cite{https://navigation.ros.org/})}
     \label{fig:nav2_architecture}
 \end{figure}
 
@@ -132,7 +132,7 @@ Nav2 is the most prominent example of \glspl{bt} in robotics and especially for 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_bt.png}
-    \caption{The default navigation behavior (Source: \cite{Marathon})}
+    \caption[The default navigation behavior]{The default navigation behavior (Source: \cite{Marathon})}
     \label{fig:nav2_bt}
 \end{figure}
 
@@ -142,6 +142,7 @@ A \gls{bt} consists of small building blocks that can be combined to create any 
 
 The fundamental element of every \gls{bt} is the root node, from which the attached nodes are updated (ticked). Each node returns either Success, Failure, or Running after being updated. In general, a \gls{bt} can be described using an \gls{fsm}, where the state transitions can take three possible states into account, as shown in Figure \ref{fig:fsm_general_bt}.
 
+\todo{translate from german}
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/02_state_of_the_art/fsm_general_bt.png}
@@ -154,7 +155,7 @@ The basic building blocks of a BT are shown in Figure \ref{fig:bt_types}. Action
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/02_state_of_the_art/bt_types.pdf}
-    \caption{Graphische Darstellung von \textit{Actions}, \textit{Conditions} und \textit{Decorators}}
+    \caption{Graphical representation of Actions, Conditions and Decorators}
     \label{fig:bt_types}
 \end{figure}
 
