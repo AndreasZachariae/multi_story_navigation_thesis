@@ -23,7 +23,7 @@ General theory:
     \item Behavior Trees
 \end{enumerate}
 
-The following overview of the state of the art consits of four main parts. First, the general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. Second, the recent approaches to hierarchical planning in large multi-story environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-story environments?" Third, the recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" Finally, in chapter \ref*{sec:research_gap} the research gap and limitations of the state of the art is summarized.
+The following overview of the state of the art consits of four main parts. First, the general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. Second, the recent approaches to hierarchical planning in large multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-floor environments?" Third, the recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" Finally, in chapter \ref*{sec:research_gap} the research gap and limitations of the state of the art is summarized.
 
 %% ==============================
 \section{General Path Planning for Mobile Robots}
@@ -122,7 +122,7 @@ The Navigation2 stack for \gls{ros_2} is a comprehensive framework for the devel
     \label{fig:nav2_architecture}
 \end{figure}
 
-In this work a new planner, capable of planning in complex multi-story environments, is developed. The algorithm is implemented as a plugin for the planner server. The rest of the Nav2 pipeline is used with existing packages.
+In this work a new planner, capable of planning in complex multi-floor environments, is developed. The algorithm is implemented as a plugin for the planner server. The rest of the Nav2 pipeline is used with existing packages.
 
 %% ==============================
 \subsubsection{Behavior Trees for Navigation}
@@ -276,11 +276,11 @@ However, there are also some disadvantages of BTs:
 
 
 %% ==============================
-\section{Hierarchical Planning for Multi-Story Environments}
+\section{Hierarchical Planning for Multi-Floor Environments}
 \label{sec:hierarchical_planning}
 %% ==============================
 
-Other approaches to Q1 (Navigate in large multi-story environments):
+Other approaches to Q1 (Navigate in large multi-floor environments):
 \begin{enumerate}
     \item General Hierarchical Graphs (Latombe, Kavraki)
     \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments

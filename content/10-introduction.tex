@@ -14,11 +14,11 @@ Questions to ask:
 
 \begin{enumerate}
     \item General field of path planning for mobile robots
-    \item Problem of path planning in multi-story environments
+    \item Problem of path planning in multi-floor environments
     \item Shared human-robot spaces
-    \item Research question: How to plan in a multi-story environment? And how to drive in public spaces with service robots?
+    \item Research question: How to plan in a multi-floor environment? And how to drive in public spaces with service robots?
     \item Significance: Many use cases in public spaces in large hierarchical environments like hospitals.
-    \item Development of a global planner plugin for straight and predictable paths in multi-story environments.
+    \item Development of a global planner plugin for straight and predictable paths in multi-floor environments.
     \item Structure of the thesis
 \end{enumerate}
 
@@ -36,11 +36,11 @@ Especially in the application area of service robotics in shared human-robot spa
 %% ==============================
 Mobile robots are increasingly being used in large environments, such as hospitals, to improve efficiency and reduce human workload. However, navigating over multiple stories poses a significant challenge for mobile robots, as it requires a planner that can account for complex spatial configurations and still find the shortest path. Moreover, the planned path must be straight, deterministic and predictable for humans who could be walking in the same space as the robot. Therefore, the specific research problem addressed in this thesis is the development of a planner that can enable a mobile robot to navigate over multiple stories in large environments, while ensuring a straight, deterministic and human-predictable path. 
 
-The ability to navigate over multiple stories is important for mobile robots in large environments, as it can significantly increase their utility and effectiveness. For instance, in hospitals, mobile robots could be used for tasks such as delivering medicines, transporting equipment, or guiding patients and visitors. Although for specific use-cases proprietary solutions exist, the lack of an open-source planner for multi-story navigation is a major bottleneck in the development of mobile robots for service applications. Moreover, the need for a straight, deterministic and human-predictable path is essential for ensuring safety and reducing the risk of collisions or accidents in shared human-robot spaces.
+The ability to navigate over multiple stories is important for mobile robots in large environments, as it can significantly increase their utility and effectiveness. For instance, in hospitals, mobile robots could be used for tasks such as delivering medicines, transporting equipment, or guiding patients and visitors. Although for specific use-cases proprietary solutions exist, the lack of an open-source planner for multi-floor navigation is a major bottleneck in the development of mobile robots for service applications. Moreover, the need for a straight, deterministic and human-predictable path is essential for ensuring safety and reducing the risk of collisions or accidents in shared human-robot spaces.
 
 The two main research questions addressed in this thesis are:
 \begin{enumerate}
-    \item How to navigate in large multi-story environments?
+    \item How to navigate in large multi-floor environments?
     \item How to plan paths that are straight, deterministic and human-predictable?
 \end{enumerate}
 
@@ -66,4 +66,4 @@ To demonstrate the feasibility and economic viability of autonomous transports i
 \section{Structure of this Thesis}
 \label{sec:structure}
 %% ==============================
-The following work is structured as follows: Chapter \ref{sec:state_of_the_art} provides an overview of the state of the art in the field of multi-story path planning for mobile robots. It also discusses the limitations of existing approaches. Chapter \ref{sec:methods} describes the methodology used to address the research questions. The concept of the graph-based planner is presented in Chapter \ref{sec:concept} followed by the implementation in Chapter \ref{sec:implementation}. This shows the approaches of creating a graph from a previously recorded map. Chapter \ref{sec:results} presents the results of the work. Chapter \ref{sec:discussion} discusses the results and provides recommendations for future work. Chapter \ref{sec:conclusion} concludes the thesis.
+The following work is structured as follows: Chapter \ref{sec:state_of_the_art} provides an overview of the state of the art in the field of multi-floor path planning for mobile robots. It also discusses the limitations of existing approaches. Chapter \ref{sec:methods} describes the methodology used to address the research questions. The concept of the graph-based planner is presented in Chapter \ref{sec:concept} followed by the implementation in Chapter \ref{sec:implementation}. This shows the approaches of creating a graph from a previously recorded map. Chapter \ref{sec:results} presents the results of the work. Chapter \ref{sec:discussion} discusses the results and provides recommendations for future work. Chapter \ref{sec:conclusion} concludes the thesis.
