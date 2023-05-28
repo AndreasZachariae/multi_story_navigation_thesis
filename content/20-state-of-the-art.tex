@@ -23,28 +23,6 @@ General theory:
     \item Behavior Trees
 \end{enumerate}
 
-Other approaches to Q1 (Navigate in large multi-story environments):
-\begin{enumerate}
-    \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments
-    \item Paper Hierarchical Path-Planning for Mobile Robots Using a Skeletonization-Informed Rapidly Exploring Random Tree*
-\end{enumerate}
-
-Other approaches to Q2 (Plan paths that are straight, deterministic and human-predictable):
-\begin{enumerate}
-    \item Voronoi Diagrams, EVG (with sensory horizont)
-    \item Smoothing algorithms (Bezier curves, B-Splines, Bechtold and Glavina, Latombe)
-    \item Paper Straight Skeleton Based Automatic Generation of Hierarchical Topological Map in Indoor Environment
-\end{enumerate}
-
-Research gap from previous approaches:
-\begin{enumerate}
-    \item Hierarchical graphs are not per room or per floor which makes it difficult to append slamed maps or semantic information
-    \item Hierarchical graphs are not used in ROS2 Nav Stack
-    \item Approaches for straight paths are not deterministic and not human-predictable
-    \item Approaches for straight paths are not implemented in ROS2 Nav Stack
-    \item Approaches for straight paths only work well in small corridors
-\end{enumerate}
-
 The following overview of the state of the art consits of four main parts. First, the general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. Second, the recent approaches to hierarchical planning in large multi-story environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-story environments?" Third, the recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" Finally, in chapter \ref*{sec:research_gap} the research gap and limitations of the state of the art is summarized.
 
 %% ==============================
@@ -301,12 +279,37 @@ However, there are also some disadvantages of BTs:
 \label{sec:hierarchical_planning}
 %% ==============================
 
+Other approaches to Q1 (Navigate in large multi-story environments):
+\begin{enumerate}
+    \item General Hierarchical Graphs (Latombe, Kavraki)
+    \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments
+    \item Paper Hierarchical Path-Planning for Mobile Robots Using a Skeletonization-Informed Rapidly Exploring Random Tree*
+\end{enumerate}
+
 %% ==============================
 \section{Straight Paths and Smoothing}
 \label{sec:straight_paths}
 %% ==============================
 
+Other approaches to Q2 (Plan paths that are straight, deterministic and human-predictable):
+
+\begin{enumerate}
+    \item Voronoi Diagrams, EVG (with sensory horizont)
+    \item Smoothing algorithms (Bezier curves, B-Splines, Bechtold and Glavina, Latombe)
+    \item ROS2 OpenRMF
+    \item Paper Straight Skeleton Based Automatic Generation of Hierarchical Topological Map in Indoor Environment
+\end{enumerate}
+
 %% ==============================
 \section{Research Gap and Limitations}
 \label{sec:research_gap}
 %% ==============================
+
+Research gap from previous approaches:
+\begin{enumerate}
+    \item Hierarchical graphs are not per room or per floor which makes it difficult to append slamed maps or semantic information
+    \item Hierarchical graphs are not used in ROS2 Nav Stack
+    \item Approaches for straight paths are not deterministic and not human-predictable
+    \item Approaches for straight paths are not implemented in ROS2 Nav Stack
+    \item Approaches for straight paths only work well in small corridors
+\end{enumerate}
