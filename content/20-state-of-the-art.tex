@@ -23,14 +23,30 @@ General theory:
     \item Behavior Trees
 \end{enumerate}
 
-The following overview of the state of the art consits of four main parts. First, the general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. Second, the recent approaches to hierarchical planning in large multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-floor environments?" Third, the recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" Finally, in chapter \ref*{sec:research_gap} the research gap and limitations of the state of the art is summarized.
+The following overview of the state of the art consist of four main parts:
+\begin{enumerate}
+    \item The general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. (Chapter \ref{sec:path_planning}).
+    \item The recent approaches to hierarchical planning in large multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
+    \item The recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" (Chapter \ref{sec:straight_paths}).
+    \item The research gap and limitations of the state of the art is summarized (Chapter \ref{sec:research_gap}).
+\end{enumerate}
 
 %% ==============================
 \section{General Path Planning for Mobile Robots}
 \label{sec:path_planning}
 %% ==============================
 
-The general approach to path planning in mobile robotics is a two-layered architecture which can be seen in Figure \ref{XX} \todo{Quelle probabalistic robotics and graphic from ppt} The first layer is the global path planning layer. It is responsible for finding a path from the start to the goal position in a previously known static environment. The second layer is the collision avoidance also known as local path planner or controller. It is responsible for avoiding dynamic obstacles that prevent the global path from being executed. For both layers there are different approaches as open source solutions available. The scope of this work is limited to extending the capabilities of the global planner for multiple floors. The collison avoidance is solved with existing algorithms. The following sections will give an overview of the most common planner algorithms. 
+The general approach to path planning in mobile robotics is a two-layered architecture which can be seen in Figure \ref{fig:path_planning_two_layered_architecture}. The first layer is the global path planning layer. It is responsible for finding a path from the start to the goal position in a previously known static environment. The second layer is the collision avoidance also known as local path planner or controller. It is responsible for avoiding dynamic obstacles that prevent the global path from being executed. For both layers there are different approaches as open source solutions available. This concept is further explained with the example in chapter \ref{sec:navigation_stack}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/path_planning_two_layered_architecture.png}
+    \caption[The two layered architecture for mobile robot path planning]{The two layered architecture for mobile robot path planning (Source: \cite{burgard_introduction_2021})}
+    \label{fig:path_planning_two_layered_architecture}
+\end{figure}
+The scope of this work is limited to extending the capabilities of the global planner for multiple floors. The collision avoidance is solved with existing algorithms. The following sections will give an overview of the most common existing global planner algorithms. 
+
+
 
 %% ==============================
 \subsection{Path Planning Algorithms}
@@ -50,19 +66,19 @@ Planning a path is a major challenge in robotics and is necessary for mobility. 
 \subsection{The Robot Operating System 2}
 \begin{displayquote}
     \enquote{The \acrfull{ros} is a framework for writing robot software. It is a collection of tools, libraries, and conventions that aim to simplify the task of creating
-    complex and robust robot behavior across a wide variety of robotic platforms.} \cite{Quigley.2015}
+    complex and robust robot behavior across a wide variety of robotic platforms.} \cite{quigley_programming_2015}
 \end{displayquote}
     
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figures/02_state_of_the_art/ros_equation.png}
-    \caption[The ROS equation]{The ROS equation: ROS = Plumbing + Tools + Capabilities + Community (Source: \cite{OpenRobotics_About.2020})}
+    \caption[The ROS equation]{The ROS equation: ROS = Plumbing + Tools + Capabilities + Community (Source: \cite{open_robotics_ros_2020})}
     \label{fig:ros_equation}
 \end{figure}
 
-The development of \gls{ros} began in 2007 as part of the Stanford AI Robot Project (STAIR) and was mainly driven by Willow Garage. There it was used as the basis for the Personal Robot 2 (PR2), but has been intended from the start as an open-source platform for a wide range of robotic applications. By now, the development is being driven forward by Open Robotics. The founders, Brian Gerkey and Morgan Quigley, have also published a comprehensive book to make it easier to get started with ROS \cite{Quigleyetal}. The ROS ecosystem consists of much more than pure code; it thrives on a large community and the exchange of ready-to-use packages, which is described by the 'ROS equation' in Figure \ref{fig:ros_equation}. Since 2011, ROS has has left the earth for the International Space Station with NASA's Robonaut 2 \cite{Diftleretal.2011}, \cite{Badgeretal.2016}. Due to the rapidly growing community and increasing application in industry, an improved version was developed and released in December 2018 as ROS 2. The main difference is the focus on real-time applications and the use of the industry standard 'Data Distribution Service' (DDS) for the communication of distributed systems.
+The development of \gls{ros} began in 2007 as part of the Stanford AI Robot Project (STAIR) and was mainly driven by Willow Garage. There it was used as the basis for the Personal Robot 2 (PR2), but has been intended from the start as an open-source platform for a wide range of robotic applications. By now, the development is being driven forward by Open Robotics. The founders, Brian Gerkey and Morgan Quigley, have also published a comprehensive book to make it easier to get started with \gls{ros} \cite{quigley_programming_2015}. The \gls{ros} ecosystem consists of much more than pure code; it thrives on a large community and the exchange of ready-to-use packages, which is described by the '\gls{ros} equation' in Figure \ref{fig:ros_equation}. Since 2011, \gls{ros} has has left the earth for the International Space Station with NASA's Robonaut 2 \cite{koubaa_ros_2016}. Due to the rapidly growing community and increasing application in industry, an improved version was developed and released in December 2018 as \gls{ros_2}. The main difference is the focus on real-time applications and the use of the industry standard 'Data Distribution Service' (DDS) for the communication of distributed systems \cite{macenski_robot_2022}.
 
-Nodes are the basis of the distributed network of an ROS application. The nodes are executed independently of each other and communicate with each other via defined interfaces. This offers the advantage that applications can be built up modularly, can be easily exchanged, and can be used in conjunction with other applications. A node can contain several topics, services or actions with which data can be exchanged with other nodes. Different nodes in a ROS application can be executed on different hardware. A collection of nodes that perform a completed function are grouped together as a package and shared by many developers around the world. A combination of related packages with a version history and managed documentation is called a stack. For example, there is the Navigation Stack, which contains all the functions needed to move the robot safely from A to B. This includes algorithms for localisation and path planning as well as the processing of sensor data for obstacle avoidance and mapping.
+Nodes are the basis of the distributed network of an \gls{ros} application. The nodes are executed independently of each other and communicate with each other via defined interfaces. This offers the advantage that applications can be built up modular, can be easily exchanged, and can be used in conjunction with other applications. A node can contain several topics, services or actions with which data can be exchanged with other nodes. Different nodes in a \gls{ros} application can be executed on different hardware. A collection of nodes that perform a completed function are grouped together as a package and shared by many developers around the world. A combination of related packages with a version history and managed documentation is called a stack. For example, there is the Navigation Stack, which contains all the functions needed to move the robot safely from A to B. This includes algorithms for localisation and path planning as well as the processing of sensor data for obstacle avoidance and mapping.
 
 \begin{figure}[h]
     \centering
@@ -80,7 +96,7 @@ The individual nodes communicate through message channels about a specific topic
     \label{fig:services}
 \end{figure}
 
-Services are based on the call-and-response model. This means that, unlike topics, messages are not unilaterally sent into the network. Instead, a request is made from a client to a server, and a response is sent back, as illustrated in Figure \ref{fig:services}. The structure resembles a function call, where parameters are passed and a return value is expected. The data types are defined in the corresponding .srv file. This type of communication is particularly useful for computations performed by another node \cite(Quigleyetal.,2015,p.51). Services can be executed synchronously or asynchronously. In a synchronous call, the calling node blocks the thread until the response arrives. Synchronous calls should only be used when the service requires a short, finite amount of time for computation. Asynchronous calls are implemented by providing a predefined function (callback) that is automatically invoked by ROS when the service response is received. This allows other code to be executed in the node as long as it does not depend on the service result.
+Services are based on the call-and-response model. This means that, unlike topics, messages are not unilaterally sent into the network. Instead, a request is made from a client to a server, and a response is sent back, as illustrated in Figure \ref{fig:services}. The structure resembles a function call, where parameters are passed and a return value is expected. The data types are defined in the corresponding .srv file. This type of communication is particularly useful for computations performed by another node \cite[p. 51]{quigley_programming_2015}. Services can be executed synchronously or asynchronously. In a synchronous call, the calling node blocks the thread until the response arrives. Synchronous calls should only be used when the service requires a short, finite amount of time for computation. Asynchronous calls are implemented by providing a predefined function (callback) that is automatically invoked by \gls{ros} when the service response is received. This allows other code to be executed in the node as long as it does not depend on the service result.
 
 \begin{figure}[h]
     \centering
@@ -89,7 +105,7 @@ Services are based on the call-and-response model. This means that, unlike topic
     \label{fig:actions}
 \end{figure}
 
-Actions have been a fixed component of the communication vocabulary since ROS 2. They are designed for the asynchronous execution of long-duration actions. In addition to the concept of services, actions allow for the exchange of feedback data during execution. Furthermore, actions provide the ability to cancel their execution. An action client sends a request (goal) to the action server, which can either accept or reject the goal. During execution, a feedback callback is invoked at the client until the result is received and processed. Actions offer a high-level communication protocol, as shown in Figure \ref{fig:actions}. A good example of the application of actions is robot movement towards a specific goal. The task should occur asynchronously and can vary in duration. Through the feedback mechanism, information about the current position of the robot can be communicated, and if the goal becomes outdated, the action can be canceled. The interface of an action for navigation is defined by an .action file, as depicted in Algorithm \ref{lst:navigatetopose.action}.
+Actions have been a fixed component of the communication vocabulary since \gls{ros_2}. They are designed for the asynchronous execution of long-duration actions. In addition to the concept of services, actions allow for the exchange of feedback data during execution. Furthermore, actions provide the ability to cancel their execution. An action client sends a request (goal) to the action server, which can either accept or reject the goal. During execution, a feedback callback is invoked at the client until the result is received and processed. Actions offer a high-level communication protocol, as shown in Figure \ref{fig:actions}. A good example of the application of actions is robot movement towards a specific goal. The task should occur asynchronously and can vary in duration. Through the feedback mechanism, information about the current position of the robot can be communicated, and if the goal becomes outdated, the action can be canceled. The interface of an action for navigation is defined by an .action file, as depicted in Algorithm \ref{lst:navigatetopose.action}.
 
 \lstset{language=python, caption={NavigateToPose.action, definition of an action from type 'NavigateToPose'}, label={lst:navigatetopose.action}}
 \begin{lstlisting}
@@ -107,50 +123,50 @@ float32 distance_remaining
 \end{lstlisting}
     
 %% ==============================
-\subsubsection{The Navigation Stack in ROS2}
+\subsection{The Navigation Stack in ROS2}
+\label{sec:navigation_stack}
 
 \begin{displayquote}
-    \enquote{Nav2 is the professionally supported spiritual successor of the ROS Navigation Stack. This project seeks to find a safe way to have a mobile robot move to complete complex tasks through many types of environments and classes of robot kinematics. Not only can it move from Point A to Point B, but it can have intermediary poses, and represent other types of tasks like object following and more. Nav2 is a production-grade and high-quality navigation framework trusted by 50+ companies worldwide.} \cite{https://navigation.ros.org/}
+    \enquote{Nav2 is the professionally supported spiritual successor of the ROS Navigation Stack. This project seeks to find a safe way to have a mobile robot move to complete complex tasks through many types of environments and classes of robot kinematics. Not only can it move from Point A to Point B, but it can have intermediary poses, and represent other types of tasks like object following and more. Nav2 is a production-grade and high-quality navigation framework trusted by 50+ companies worldwide.} \cite{steve_macenski_navigation_2020}
 \end{displayquote}
 
-The Navigation2 stack for \gls{ros_2} is a comprehensive framework for the development of new planner algorithms. The planner developed in this work is based on the Nav2 stack and is written as an exchangable plugin for the existing structure. With its server and plugin layout Nav2 supports custom planner, controller behavior and smoother plugins. In Figure \ref{fig:nav2_architecture} the architecture of Nav2 is shown. It follows the classic two-layered architecture for path planning seen in Figure \ref{XX}. The planner server provides the global path planning on a known map and the controller server offers algorithms for follwoing this path with dynamic obstacle avoidance. The necessary inputs for this system are the map, the odometry of the robot wheels and the sensor data from lidars or cameras. With these informations the localization can calculate the most likely position of the robot in the map. The planner plans a path from this current position to the goal. In a control loop, the controller tries to reduce the error between the current position and the planned path. The output of the controller is a velocity command for the robot. The velocity command is then executed by the robot's motor controller.
+The \gls{nav_2} stack for \gls{ros_2} is a comprehensive framework for the development of new planner algorithms. The planner developed in this work is based on the \gls{nav_2} stack and is written as an exchangeable plugin for the existing structure. With its server and plugin layout \gls{nav_2} supports custom planner, controller behavior and smoother plugins. In Figure \ref{fig:nav2_architecture} the architecture of \gls{nav_2} is shown. It follows the classic two-layered architecture for path planning seen in Figure \ref{fig:path_planning_two_layered_architecture}. The planner server provides the global path planning on a known map and the controller server offers algorithms for following this path with dynamic obstacle avoidance. The necessary inputs for this system are the map, the odometry of the robot wheels and the sensor data from lidars or cameras. With this information the localization can calculate the most likely position of the robot in the map. The planner plans a path from this current position to the goal. In a control loop, the controller tries to reduce the error between the current position and the planned path. The output of the controller is a velocity command for the robot. The velocity command is then executed by the robot's motor controller.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_architecture.png}
-    \caption[The architecture of the Nav2 stack]{The architecture of the Nav2 stack (Source: \cite{https://navigation.ros.org/})}
+    \caption[The architecture of the \gls{nav_2} stack]{The architecture of the \gls{nav_2} stack (Source: \cite{steve_macenski_navigation_2020})}
     \label{fig:nav2_architecture}
 \end{figure}
 
-In this work a new planner, capable of planning in complex multi-floor environments, is developed. The algorithm is implemented as a plugin for the planner server. The rest of the Nav2 pipeline is used with existing packages.
+In this work a new planner, capable of planning in complex multi-floor environments, is developed. The algorithm is implemented as a plugin for the planner server. The rest of the \gls{nav_2} pipeline is used with existing packages.
 
 %% ==============================
-\subsubsection{Behavior Trees for Navigation}
+\subsection{Behavior Trees for Navigation}
 
-Nav2 is the most prominent example of \glspl{bt} in robotics and especially for navigation. It uses \glspl{bt} to create customized and intelligent navigation behavior by orchestrating many independent modular servers. The default \gls{bt} for executing a navigation request to a specific goal is shown in Figure \ref{fig:nav_bt}. It shows the actual planner, an A* algorithm, on the left side which is triggered every second (1 Hz). All other named actions are recovery behaviors which are used to clear the costmaps and reorient the robot if it gets stuck. To understand the symbolic language of the \gls{bt} the single elemnts are explained in the following section.
+\gls{nav_2} is the most prominent example of \glspl{bt} in robotics and especially for navigation. It uses \glspl{bt} to create customized and intelligent navigation behavior by orchestrating many independent modular servers. The default \gls{bt} for executing a navigation request to a specific goal is shown in Figure \ref{fig:nav2_bt}. It shows the actual planner, an A* algorithm, on the left side which is triggered every second (1 Hz). All other named actions are recovery behaviors which are used to clear the costmaps and reorient the robot if it gets stuck. To understand the symbolic language of the \gls{bt} the single elements are explained in the following section.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_bt.png}
-    \caption[The default navigation behavior]{The default navigation behavior (Source: \cite{Marathon})}
+    \caption[The default navigation behavior]{The default navigation behavior (Source: \cite{macenski_marathon_2020})}
     \label{fig:nav2_bt}
 \end{figure}
 
-\Glspl{bt} were developed for video games to describe the behavior of computer-controlled characters in a modular way \cite{Limetal.,2010}. BTs combine a deliberative approach with reactive components. The internal structure of the tree establishes an overall plan of actions, ensuring goal-oriented behavior. However, reactive behavior can still be triggered through constant reevaluation of all conditions. 
+\Glspl{bt} were developed for video games to describe the behavior of computer-controlled characters in a modular way \cite{hutchison_evolving_2010}. \Glspl{bt} combine a deliberative approach with reactive components. The internal structure of the tree establishes an overall plan of actions, ensuring goal-oriented behavior. However, reactive behavior can still be triggered through constant reevaluation of all conditions. 
 
 A \gls{bt} consists of small building blocks that can be combined to create any control structure. The biggest difference from State Machines is that in \glspl{fsm}, a state-dependent transition is triggered after a specific input. In \glspl{bt}, on the other hand, the entire structure is updated at regular, short time intervals, and all conditions are re-evaluated. This allows for arbitrary transitions to occur based on the appropriate preconditions, without explicitly defining them.
 
 The fundamental element of every \gls{bt} is the root node, from which the attached nodes are updated (ticked). Each node returns either Success, Failure, or Running after being updated. In general, a \gls{bt} can be described using an \gls{fsm}, where the state transitions can take three possible states into account, as shown in Figure \ref{fig:fsm_general_bt}.
 
-\todo{translate from german}
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/02_state_of_the_art/fsm_general_bt.png}
-    \caption[Allgemeiner \textit{Behavior Tree} als FSM]{Darstellung eines allgemeinen \gls{bt} durch eine \gls{fsm} mit den Zustandsübergängen \textit{Success} (S), \textit{Running} (R) und \textit{Failure} (F) (Source: Colledanchise.2018)}
+    \caption[General \gls{bt} displayed as \gls{fsm}]{General \gls{bt} displayed as \gls{fsm} with the state transitions: Success (S), Running (R) and Failure (F) (Source: \cite{colledanchise_behavior_2018})}
     \label{fig:fsm_general_bt}
-                          \end{figure}
+\end{figure}
 
-The basic building blocks of a BT are shown in Figure \ref{fig:bt_types}. Actions represent individual, self-contained algorithms that execute specific commands to actuators or perform calculations. An Action can run in a blocking (synchronous) manner, where it returns either Success or Failure after its start, or it can run asynchronously and maintain a Running state during execution. Conditions, on the other hand, take either Success or Failure states depending on the condition being evaluated.
+The basic building blocks of a \gls{bt} are shown in Figure \ref{fig:bt_types}. Actions represent individual, self-contained algorithms that execute specific commands to actuators or perform calculations. An Action can run in a blocking (synchronous) manner, where it returns either Success or Failure after its start, or it can run asynchronously and maintain a Running state during execution. Conditions, on the other hand, take either Success or Failure states depending on the condition being evaluated.
 
 \begin{figure}[h]
     \centering
@@ -253,7 +269,7 @@ An overview of the functions of each element is presented in Table \ref{tab:over
 \label{tab:overview_bt}
 \end{table}
 
-BTs represent an evolution of \gls{fsm}, which are still widely used, but offer several advantages beyond them. The following are the advantages and drawbacks of \glspl{bt}. These characteristics are not necessarily unique to \glspl{bt} but also apply to other concepts such as \glspl{hfsm} or decision trees \cite{ColledanchiseandÖgren,2018,pp.37ff.}.
+\Glspl{bt} represent an evolution of \gls{fsm}, which are still widely used, but offer several advantages beyond them. The following are the advantages and drawbacks of \glspl{bt}. These characteristics are not necessarily unique to \glspl{bt} but also apply to other concepts such as \glspl{hfsm} or decision trees \cite{colledanchise_behavior_2018}.
 
 \begin{enumerate}
   \item \textbf{Modularity:} Individual subsystems can be modified and replaced as needed. The entire BT can also be reused as a module.
