@@ -40,7 +40,7 @@ The general approach to path planning in mobile robotics is a two-layered archit
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/path_planning_two_layered_architecture.png}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/path_planning_two_layered_architecture.png}
     \caption[The two layered architecture for mobile robot path planning]{The two layered architecture for mobile robot path planning (Source: \cite{burgard_introduction_2021})}
     \label{fig:path_planning_two_layered_architecture}
 \end{figure}
@@ -71,7 +71,7 @@ Planning a path is a major challenge in robotics and is necessary for mobility. 
     
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figures/02_state_of_the_art/ros_equation.png}
+    \includegraphics[width=1\textwidth]{figures/20_state_of_the_art/ros_equation.png}
     \caption[The ROS equation]{The ROS equation: ROS = Plumbing + Tools + Capabilities + Community (Source: \cite{open_robotics_ros_2020})}
     \label{fig:ros_equation}
 \end{figure}
@@ -82,7 +82,7 @@ Nodes are the basis of the distributed network of an \gls{ros} application. The 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/topics.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/topics.pdf}
     \caption{The structure of a ROS topic}
     \label{fig:topics}
 \end{figure}
@@ -91,7 +91,7 @@ The individual nodes communicate through message channels about a specific topic
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/services.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/services.pdf}
     \caption{The structure of a ROS service}
     \label{fig:services}
 \end{figure}
@@ -100,7 +100,7 @@ Services are based on the call-and-response model. This means that, unlike topic
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/actions.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/actions.pdf}
     \caption{The structure of a ROS action}
     \label{fig:actions}
 \end{figure}
@@ -134,7 +134,7 @@ The \gls{nav_2} stack for \gls{ros_2} is a comprehensive framework for the devel
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_architecture.png}
+    \includegraphics[width=\textwidth]{figures/20_state_of_the_art/nav2_architecture.png}
     \caption[The architecture of the \gls{nav_2} stack]{The architecture of the \gls{nav_2} stack (Source: \cite{steve_macenski_navigation_2020})}
     \label{fig:nav2_architecture}
 \end{figure}
@@ -148,7 +148,7 @@ In this work a new planner, capable of planning in complex multi-floor environme
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/02_state_of_the_art/nav2_bt.png}
+    \includegraphics[width=\textwidth]{figures/20_state_of_the_art/nav2_bt.png}
     \caption[The default navigation behavior]{The default navigation behavior (Source: \cite{macenski_marathon_2020})}
     \label{fig:nav2_bt}
 \end{figure}
@@ -161,7 +161,7 @@ The fundamental element of every \gls{bt} is the root node, from which the attac
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/02_state_of_the_art/fsm_general_bt.png}
+    \includegraphics[width=0.7\textwidth]{figures/20_state_of_the_art/fsm_general_bt.png}
     \caption[General \gls{bt} displayed as \gls{fsm}]{General \gls{bt} displayed as \gls{fsm} with the state transitions: Success (S), Running (R) and Failure (F) (Source: \cite{colledanchise_behavior_2018})}
     \label{fig:fsm_general_bt}
 \end{figure}
@@ -170,7 +170,7 @@ The basic building blocks of a \gls{bt} are shown in Figure \ref{fig:bt_types}. 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/02_state_of_the_art/bt_types.pdf}
+    \includegraphics[width=0.7\textwidth]{figures/20_state_of_the_art/bt_types.pdf}
     \caption{Graphical representation of Actions, Conditions and Decorators}
     \label{fig:bt_types}
 \end{figure}
@@ -179,7 +179,7 @@ The Decorator is a type of control node that has only one child. It allows the s
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/sequence.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/sequence.pdf}
     \caption{Graphical BT of a Sequence with \textit{N} childs}
     \label{fig:sequence}
 \end{figure}
@@ -203,7 +203,7 @@ The Sequence starts its children from left to right in the graphical representat
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/fallback.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/fallback.pdf}
     \caption{Graphical BT of a Fallback with \textit{N} childs}
     \label{fig:fallback}
   \end{figure}
@@ -226,7 +226,7 @@ The Sequence starts its children from left to right in the graphical representat
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/02_state_of_the_art/parallel.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/parallel.pdf}
     \caption{Graphical BT of a Parallel with \textit{N} childs}
     \label{fig:parallel}
 \end{figure}
@@ -299,9 +299,32 @@ However, there are also some disadvantages of BTs:
 Other approaches to Q1 (Navigate in large multi-floor environments):
 \begin{enumerate}
     \item General Hierarchical Graphs (Latombe, Kavraki)
+    \item Hierarchical D* algorithm with materialization of costs for robot path planning (Cagigas)
+    \item Hierarchical path planning of mobile robots in complex indoor environments (Seder)
     \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments
     \item Paper Hierarchical Path-Planning for Mobile Robots Using a Skeletonization-Informed Rapidly Exploring Random Tree*
+    \item ROS1 Multi-floor example
+    \item Amazon multi floor hospital
 \end{enumerate}
+
+This section presents the related work in the area of path planning with hierarchical graphs. A \Gls{h_graph} is a graph where each node in the graph holds a sub-graph itself. This is used for hierarchically structure information while the connections in on graph also represent information. The connections in a graph can be any configuration of non-directional, directional, bi-directional, sparse or densely connected. This depends on the data it stores. For navigation this data can be the logic separations of a complex environment like a research campus. The hierarchical layers could be buildings, floors, rooms and the gridmap itself. The structure of an \gls{h_graph} can be represented as a tree. An \gls{h_graph} with three hierarchical layers can be represented as a tree with a depth of three. An example of the structure of an \gls{h_graph} can be seen in Figure \ref{fig:h_graph}. The internal connections of the nodes in each graph is not represented. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/20_state_of_the_art/hierarchical_graph.png}
+    \caption[Representation of the structure of an H-Graph as tree]{Representation of the structure of an H-Graph with three hierarchical layers as a tree with depth of three. This example shows the whole campus on layer 3 (red), the buildings of this campus on layer 2 (orange), the floors of each building on layer 1 (blue) and the single rooms on layer 0 (green). For better visibility only some example nodes are fully expanded}
+    \label{fig:h_graph}
+\end{figure}
+
+For use in navigation the hierarchical graph structure represents the physical environment, this was first applied to mobile robot path planning by \cite{fernandez_hierarchical_1998} \cite{fernandez-madrigal_multi-hierarchical_2001}. The nodes in each graph are connected only if a drivable connection between these buildings or rooms exits. To make this space plannable the connection has a cost corresponding to the shortest path distance between these two entities. This allows a common graph solver algorithm like Dijkstra or A* to find the shortest path in each graph. The advantage of a \gls{h_graph} is that not every leaf node in the tree has to be searched because only the nodes which are on the path of the higher layer are relevant. This reduces the search space and the time needed to find the optimal path in large environments drastically. To combine a feasible path from all different graphs on the lowest layer continuity between paths of different subgraphs has to be ensured.
+
+One proposed solution is the D* algorithm from Daniel Cagigas it ...
+Focus is on dynamic replanning...
+Seder improved this algorithm by ... And created a H graph with bridged points as nodes
+
+
+
+
 
 %% ==============================
 \section{Straight Paths and Smoothing}
