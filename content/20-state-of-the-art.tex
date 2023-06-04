@@ -26,8 +26,8 @@ General theory:
 The following overview of the state of the art consist of four main parts:
 \begin{enumerate}
     \item The general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. (Chapter \ref{sec:path_planning}).
-    \item The recent approaches to hierarchical planning in large multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in large multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
-    \item The recent approaches to straight paths and smoothing are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" (Chapter \ref{sec:straight_paths}).
+    \item The recent approaches to hierarchical planning in complex multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in complex multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
+    \item The recent approaches to straight path planning are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" (Chapter \ref{sec:straight_paths}).
     \item The research gap and limitations of the state of the art is summarized (Chapter \ref{sec:research_gap}).
 \end{enumerate}
 
@@ -292,11 +292,11 @@ However, there are also some disadvantages of BTs:
 
 
 %% ==============================
-\section{Hierarchical Planning for Multi-Floor Environments}
+\section{Hierarchical Path Planning}
 \label{sec:hierarchical_planning}
 %% ==============================
 
-Other approaches to Q1 (Navigate in large multi-floor environments):
+Other approaches to Q1 (Navigate in complex multi-floor environments):
 \begin{enumerate}
     \item General Hierarchical Graphs (Latombe, Kavraki)
     \item Hierarchical D* algorithm with materialization of costs for robot path planning (Cagigas)
@@ -304,41 +304,140 @@ Other approaches to Q1 (Navigate in large multi-floor environments):
     \item Paper IAS-17 Autonomous Hierachy Creation for Path Planning of Mobile Robots in Large Environments
     \item Paper Hierarchical Path-Planning for Mobile Robots Using a Skeletonization-Informed Rapidly Exploring Random Tree*
     \item ROS1 Multi-floor example
-    \item Amazon multi floor hospital
+    \item Amazon multi floor hospital (not found)
 \end{enumerate}
 
-This section presents the related work in the area of path planning with hierarchical graphs. A \Gls{h_graph} is a graph where each node in the graph holds a sub-graph itself. This is used for hierarchically structure information while the connections in on graph also represent information. The connections in a graph can be any configuration of non-directional, directional, bi-directional, sparse or densely connected. This depends on the data it stores. For navigation this data can be the logic separations of a complex environment like a research campus. The hierarchical layers could be buildings, floors, rooms and the gridmap itself. The structure of an \gls{h_graph} can be represented as a tree. An \gls{h_graph} with three hierarchical layers can be represented as a tree with a depth of three. An example of the structure of an \gls{h_graph} can be seen in Figure \ref{fig:h_graph}. The internal connections of the nodes in each graph is not represented. 
+This section presents the related work in the area of path planning with hierarchical graphs. This gives an overview of the relevant existing works corresponding to the first research question: "How to navigate in complex multi-floor environments?". 
+A \Gls{h_graph} is a graph where each node in the graph holds a sub-graph itself. This is used for hierarchically structure information while the connections in on graph also represent information. The connections in a graph can be any configuration of non-directional, directional, bi-directional, sparse or densely connected. This depends on the data it stores. For navigation this data can be the logic separations of a complex environment like a research campus. The hierarchical layers could be buildings, floors, rooms and the gridmap itself. The structure of an \gls{h_graph} can be represented as a tree. An \gls{h_graph} with three hierarchical layers can be represented as a tree with a depth of three. An example of the structure of an \gls{h_graph} can be seen in Figure \ref{fig:h_graph}. The internal connections of the nodes in each graph is not represented in the figure. 
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/20_state_of_the_art/hierarchical_graph.png}
-    \caption[Representation of the structure of an H-Graph as tree]{Representation of the structure of an H-Graph with three hierarchical layers as a tree with depth of three. This example shows the whole campus on layer 3 (red), the buildings of this campus on layer 2 (orange), the floors of each building on layer 1 (blue) and the single rooms on layer 0 (green). For better visibility only some example nodes are fully expanded}
+    \caption[Representation of the structure of an H-Graph as tree]{Representation of the structure of an H-Graph with three hierarchical layers as a tree with depth of three. This example shows the whole campus on layer 0 (red), the buildings of this campus on layer 1 (orange), the floors of each building on layer 2 (blue) and the single rooms on layer 3 (green). For better visibility only some example nodes are fully expanded}
     \label{fig:h_graph}
 \end{figure}
 
-For use in navigation the hierarchical graph structure represents the physical environment, this was first applied to mobile robot path planning by \cite{fernandez_hierarchical_1998} \cite{fernandez-madrigal_multi-hierarchical_2001}. The nodes in each graph are connected only if a drivable connection between these buildings or rooms exits. To make this space plannable the connection has a cost corresponding to the shortest path distance between these two entities. This allows a common graph solver algorithm like Dijkstra or A* to find the shortest path in each graph. The advantage of a \gls{h_graph} is that not every leaf node in the tree has to be searched because only the nodes which are on the path of the higher layer are relevant. This reduces the search space and the time needed to find the optimal path in large environments drastically. To combine a feasible path from all different graphs on the lowest layer continuity between paths of different subgraphs has to be ensured.
+For use in navigation the structure of the \gls{h_graph} represents the physical environment, this was first applied to mobile robot path planning by \cite{fernandez_hierarchical_1998} \cite{fernandez-madrigal_multi-hierarchical_2001}. The nodes in each graph are connected only if a drivable connection between these buildings or rooms exits. To make this space plannable the connection has a cost corresponding to the shortest path distance between these two entities. This allows a common graph solver algorithm like Dijkstra or A* to find the shortest path in each graph. The advantage of a \gls{h_graph} is that not every leaf node in the tree has to be searched because only the nodes which are on the path of the higher layer are relevant. This reduces the search space and the time needed to find the optimal path in large environments drastically. To combine a feasible path from all different graphs on the lowest layer, continuity between paths of different subgraphs has to be ensured.
 
-One proposed solution is the D* algorithm from Daniel Cagigas it ...
-Focus is on dynamic replanning...
-Seder improved this algorithm by ... And created a H graph with bridged points as nodes
+One proposed solution is the Hierarchical D* (HD*) algorithm from Cagigas \cite{cagigas_hierarchical_2005}. Cagigas breaks down an environment by hierarchical decomposition into an \gls{h_graph}. In each subgraph the shortest connections to elevators are precalculated and stored as weight of the connection in the meta-graph. This is called materialization of costs. After finding the shortest path based on these costs, a reconstruction process is applied that links the obtained partial paths. Cagigas extends the original D* algorithm \cite{hebert_optimal_1997} for this hierarchical planning. The D* algorithm is represents a dynamic or on-line version of the A* algorithm. The D* reuses and updates the calculated cost from the intial search to replan the path if an dynamic obstacle blocks the initial path. This is an efficient way to replan without calculating all costs again. Cagigas defines three types of hierarchical path planning: 
+\begin{enumerate}
+    \item \textbf{Horizontal path planning (HPP):} paths between nodes connected in a horizontal way. Equivalent to traditional robot path planning.
+    \item \textbf{Vertical path planning (VPP):} paths between nodes connected in a vertical way. Namely, paths that begin on a floor and finish on another floor of the same building.
+    \item \textbf{Inter-building path planning (IPP):} paths between nodes of different buildings. These paths begin on a floor of a building and finish on a floor of another building.
+\end{enumerate}
+Cagigas identifies the elevator selection problem shown in Figure \ref{fig:elevator_selection_problem} which occures in vertical path planning. The benefits of the HD* can not be applied here and a complete path replanning is necessary.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/elevator_selection_problem.jpg}
+    \caption[The elevator selection problem]{On-line vertical path planning. A “broken” arc \(A_b\) (obstacle) is detected between the current node \(N_c\) and the next node \(N_n\) in an initial path that joins a start node \(N_s\) and a goal node \(N_g\). The path planner module has to select an elevator entrance and there are two possibilities: the elevator entrance in the initial path (Elevator E.1) or an alternative elevator entrance (Elevator E.2). This last selection implies a complete path replanning. (Source: \cite{cagigas_hierarchical_2005})}
+    \label{fig:elevator_selection_problem}
+\end{figure}
 
 
+In \cite{seder_hierarchical_2011} Seder proposed the Focussed Hierarchical D* (FHD*) algorithm. It improves the HD* algorithm by Cagigas in the following points:
+\begin{enumerate}
+    \item optimal placement of the so-called bridge nodes needed for hierarchy creation.
+    \item focusing the search around the optimal path, which reduces the search area without loss of optimality.
+    \item introduction of partial starts and partial goals, which further reduce computational time of replanning operations.
+\end{enumerate}
 
+Especially the optimal placement of bridge points is important to ensure optimal paths over multiple hierarchies. Bridge nodes are be placed at the optimal path that is to be followed by a mobile robot on its way from one room to the other. Seder calculates the optimal position by using a safety cost mask to find the middle point in a narrow passage. This corresponds to the safest point for a robot to drive through a door. In Figure \ref{fig:bridge_node_placement} an example of the bridge node placement can be seen. Seder shows, that the FHD* agorithm is faster during replanning, needs fewer iterations and fewer explored nodes compared to the D*, FD* and HD* algorithms.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/bridge_node_placement_paths.png}
+    \caption[The bridge nodes with precalculated paths]{The bridge nodes BN 1-4 and the precalculated paths between them. (Source: \cite{seder_hierarchical_2011})}
+    \label{fig:bridge_node_placement}
+\end{figure}
+
+Gregoric \cite{gregoric_autonomous_2022} further extends the ideas of Seder by using the E* algorithm \cite{philippsen_interpolated_2005}. This leverages the A* to plan with an arbitrary angle instead of a fixed grid with 90 degrees (4 neighbours) or 45 degrees (8 neighbours). Gregoric proposes a method to automatically generate an H-Graph from CAD floor plans. On floor map level this is done by using the safety cost mask. Connections between buildings are assumed to be on the ground floor. Vertical bridge connections are found with three conditions: 
+
+\begin{enumerate}
+    \item Comparing the positions of nodes on each floor
+    \item The size of the room 
+    \item The number of doors connecting this room to others
+\end{enumerate}
+
+Ryu uses a different approach in generation of the \gls{h_graph} as well as finding the subpaths \cite{ryu_hierarchical_2020}. Ryu only uses a two-layered hierarchy on a single floor. The two hierarchies are the so called inter- and intra-regional graphs which correspond to the connections between rooms and the path between the doors in each room. The hierarchy is automatically created by segmenting the entire floor plan into rooms. This is done by using the marker controlled watershed algorithm \cite{parvati_image_2009}. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/ryu_floor_path.png}
+    \caption[The segmented floor map with combined inter-regional paths]{The segmented floor map with combined inter-regional paths (Source: \cite{ryu_hierarchical_2020})}
+    \label{fig:ryu_floor_path}
+\end{figure}
+
+For the next step Ryu proposes an algorithm for detecting safe junction nodes as bridge between each room. A distance transform is used and the node with the highest clearance to the obstacle is chosen. This is similar to the process from Seder where a safety cost mask is applied. With these junction nodes the intra-graph is created as seen in Figure \ref{fig:ryu_floor_path}. Ryu then uses a Skeletonization-Informed Rapidly Exploring Random Tree* (SIRRT*) to plan the inter-regional path. This is an extension from the classic sample-based RRT algorithm. It uses a skeletonized representation of the grid map of a single room. This skeleton is used to inform the sampling of the RRT algorithm by generating nodes close to the skeleton. In Figure \ref{fig:ryu_sirrt} a solution path of the SIRRT* is shown. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/ryu_sirrt.png}
+    \caption[Path planning with the SIRRT*]{An example of local path-planning for Segment “9” using the skeletonization informed rapidly exploring random tree* (SIRRT*): The red dot is the start position; the green dot is the goal. The initial skeleton path (yellow line). The final tree (blue line) and the optimized path (red line). The are for generating new sample nodes (green) (Source: \cite{ryu_hierarchical_2020})}
+    \label{fig:ryu_sirrt}
+\end{figure}
+
+The previous papers were using simulated 2D gridmap environments. They have not mentioned the application on a real robot. Dihman et al \cite{dhiman_ros_2020} and Wang et al \cite{wang_autonomous_2019} separately introduced a framework for using multi-floor navigation with ROS 1 on a real robot. Wang uses a modified A* algorithm to plan paths that are more centered in the hallway. The main contribution is the development of an CNN to detect the current floor by pictures. A VGG16 network architecture is trained with 7,000 images to predict the current floor of the robot. It is not mentioned if automatic hierarchy creation or an H-Graph is used for navigation. It is also not mentioned how the robot knows which elevator or floors it needs to drive to. Only on floor map level path planning is done with the extended A*. Wang uses a real robot, the Pioneer 3-DX, and integrates everything in the existing ROS navigation stack. Dihman in comparison proposes a method for global path planning on a cost graph. This is one single graph to represent the floors and rooms of a single building, see Figure \ref{fig:dihman_cost_graph}. Vertical connections are drawn in the same graph and represented with corresponding traversal costs. Dihman also modifies the existing ROS 1 navigation stack to account for multiple robots and autonomous exploration. Additionally the map server is extended for a multi-level occupancy gridmap and the global planner plans with respect to the cost graph.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/dihman_cost_graph.png}
+    \caption[The costgraph for the robot]{(a) A building is represented as levels with stair or lift connection between floors, represented by thick blue parallel-lines. Blue and green color triangle represent current robot pose and goal pose respectively. (b) The building is transformed into a weighted graph. The node names refer to connection between the floor. (c) represents a weighted graph which includes edges from current robot pose and goal pose to the conncetion on the respective floor. This graph will be further used for solving global path planning. (Source: \cite{dhiman_ros_2020})}
+    \label{fig:dihman_cost_graph}
+\end{figure}
+
+A comparison of these approaches to hierachical path planning in multi-floor environments is done in Chapter \ref{sec:research_gap}.
+It can be seen, that the focus is either on the automatic hierarchy creation and efficient replanning or on the integration with ROS and the extension with additional features like CNN floor detection or multiple robots. This work aims to provide a mixture of these features by providing a method for automatic hierarchy creation for an H-Graph and integrating it in the new ROS 2 in simulation and for a real robot.
 
 %% ==============================
-\section{Straight Paths and Smoothing}
+\section{Straight Path Planning}
 \label{sec:straight_paths}
 %% ==============================
-
-Other approaches to Q2 (Plan paths that are straight, deterministic and human-predictable):
 
 \begin{enumerate}
     \item Voronoi Diagrams, EVG (with sensory horizont)
     \item Smoothing algorithms (Bezier curves, B-Splines, Bechtold and Glavina, Latombe)
     \item ROS2 OpenRMF
     \item Paper Straight Skeleton Based Automatic Generation of Hierarchical Topological Map in Indoor Environment
+    \item Semantic and Topological Mapping using Intersection Identification (Has comparison on the AWS hospital map!)
 \end{enumerate}
+
+In this section the recent approaches to straight path planning are presented. This gives an overview of the relevant existing works corresponding to the second research question: "How to plan paths that are straight, deterministic and human-predictable?"
+
+A common approach in path planning is the creation of a roadmap. The advantages of roadmaps are that they are very efficient for replanning because the roadmap is not recalculated every time. Depending on the creation process roadmaps do not guarantee optimality but they provide a feasible answer within a short period of time. This is especially useful for motion planning in a higher dimension space for multi axis manipulators. The configuration space \(C\) in the case of plane 2D path planning has the same x and y axis as the real space. Obstacles in \(C\)-space are inflated by the size of the robot to find collision free paths.
+
+\begin{displayquote}
+    \enquote{The roadmap approach to path planning consists of capturing the connectivity of the robot's free space in a network of one-dimensional curves, called the roadmap, lying in the free space \(C_{free}\) or its closure \(cl(C_{free})\). Once a roadmap \(R\) has been constructed . it is used as a set of standardized paths. Path planning is thus reduced to connecting the initial and goal configurations to points in \(R\) and searching \(R\) for a path between these points. The constructed path, if any, is the concatenation of three subpaths: a subpath connecting the initial configuration to the roadmap, a subpath contained in the roadmap, and a subpath connecting the roadmap to the goal configuration.} \cite{latombe_robot_2003}
+\end{displayquote}
+
+In the previously presented RRT or PRM algorithm the roadmap is created by randomly sampling free points in \(C\)-space and connection them with a collision free egde. Another approach for roadmap creation is the Voronoi diagramm. The diagram is the set of all points with the largest distance to neighbouring obstacles. It consits of free paths which maximize the obstacle clearance.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/20_state_of_the_art/voronoi_diagram.png}
+    \caption[The Voronoi diagram]{This figure shows the Voronoi diagram in a configuration space with a polygonal \(C\)-obstacle region. The free space is externally bounded by a rectangle. The initial and goal configurations \(q_{init}\) and \(q_{goal}\) are mapped into the Voronoi diagram to \(q'_{init}\) and \(q'_{goal}\), each by drawing the line along which its distance to the boundary to the \(C\)-obstacle region increases the fastest. (Source: \cite{latombe_robot_2003})}
+    \label{fig:voronoi_diagram}
+\end{figure}
+
+The generalized Voronoi diagram, also called graph (GVG / GVD) is defined as the one-dimensional set of points equidistant to n or more obstacles in n-dimensions. By pruning the graph based on a minimum length the reduced generalized Voronoi graph (RGVG) can be obtained. Beeson et al. \cite{beeson_towards_2005} extended the GVD to solve a limited sensory horizont of mobile robots. The Extended Voronoi graph (EVG) transitions from a midleline in narrow corridors to a line which follows the walls in open rooms.  However the resulting paths suffer from noise in the measurements resulting in not straight paths. Also in junctions the GVD and EVG produce paths that bend into the intersections open space. Thus creating a unnecessary curve for the straight direction as seen in Figure \ref{fig:htm_path_comparison} c).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/20_state_of_the_art/htm_path_comparison.png}
+    \caption[Comparison between straight paths]{EVG based tracks coincide with RGVG based tracks within the sensory horizon. HTM based tracks coincide with smooth HTM when non-turning. (a) Tracks in the straight corridor. (b) Tracks in the turning corridor. (c) Tracks in the corridor with a room on the side. (Source: \cite{hou_straight_2021})}
+    \label{fig:htm_path_comparison}
+\end{figure}
+
+Another approach for retrieving the topological map of an environment is the Straight Skeleton \cite{maurer_novel_1996}. In comparison to Voronoi diagrams this method does not use a distance function but shrinks the obstacle-polygon into the free space. Each edge is moved along its normal axis at the same speed, this creates a boundary where the shrinked edges touch. Based on this Straight Skeleton Hou et al. \cite{hou_straight_2021} improved the straight path generation and counters the jitter problem of the EVG. Hou et al. proposes the Hierarchical Topological Map (HTM) for the automatic generation of valid straight paths. The hierarchical approach first generates the straight skeleton and then detects intersections or small rooms where the jitter problem occures. These sections are extracted and a separate skeleton is generated inside which is then connected back to the global path. Finally a clothoid-based smoothing method is applied to ensure the curvature continuity of generated tracks. A comparison of the discussed algorithms for generating topological maps and straight paths can bee seen in Figure \ref{fig:htm_global_comparison}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/20_state_of_the_art/htm_global_comparison.png}
+    \caption[Comparison between straight paths]{Comparison of skeleton generation, using the grid map obtained from \cite{beeson_towards_2005}. (a) GVD. (b) RGVG. (c) EVG with a sensory horizon of 1.25m. (d) HTM. Primary tracks, secondary tracks, and regions are marked in red, purple, and blue, respectively. (Source: \cite{hou_straight_2021})}
+    \label{fig:htm_global_comparison}
+\end{figure}
+
+The presented methods focus on the goal of extracting a topological map from the gridmap. The HTM also focuses on generating paths that a straight. Further discussion on the limitations of these approaches and the resulting research gap this work aims to address is done in Chapter \ref{sec:research_gap}. 
 
 %% ==============================
 \section{Research Gap and Limitations}
@@ -353,3 +452,15 @@ Research gap from previous approaches:
     \item Approaches for straight paths are not implemented in ROS2 Nav Stack
     \item Approaches for straight paths only work well in small corridors
 \end{enumerate}
+
+Table with an overview of all related work
+Author, algorithm, hierarchy levels, real robot, ROS1, ROS2, (automatic) hierarchy creation, Optimal, efficient replanning
+
+Cagigas uses an environment with three hierarchy levels (floors, rooms and gridmap), no real robot or ROS, Manual hierarchy creation
+Seder only uses a 2D floor-level environment with two hierarchies (rooms and gridmap), no real robot or ROS, automatic bridge point detection
+Gregoric assumes a very simple multi-building environment where vertical bridge nodes are always directly above each other and connect only floors of the same building. Further buildings are assumed to have only one connection between each other on the ground floor. Although in complex environments bridges on upper floors, ramps or densely connected building sections are possible.
+Ryu uses only a plane 2D environment on a single floor and creates a H-Graph with two hierarchy levels. This approach is not extended for a higher level of hierarchy. The Proposed SIRRT* is a fast algorithm but does not guarantee optimality. 
+Wang implements a floor detection with CNN wich can be counted as a kind of hierarchy creation. But multi-floor planning is not discussed. Wang implements his work on a real robot with ROS 1.
+Dihman uses a different approach with a single weighted graph for hierarchy representation. It is not created automatically but he uses multiple robots ans exploration to obtain the gridmaps. This is also implemented on ROS 1.
+
+The HTM also focuses on generating paths that a straight. This makes these paths predictable for humans walking in the same area as the mobile robot. Also all of these approaches are deterministic. This means, given the same gridmap, these algorithms always produce the same output path. There is not a probabilistic function involved which generates random points like in the RRT or PRM. A path that is deterministic is also more predictable for humans as the robot behaves the same. The advantage is that humans working in the same space can learn the paths of the mobile robot and can predict areas where a robot might drive through. This is useful for the hospital environment of the PeTRA use-case. However the generated paths or not ideal for open spaces and large rooms as seen in Figure \ref{fig:htm_global_comparison} d). Assuming this is a lobby or other large room where people might wait and walk between doors. The path generated by the HTM are not intuitive. One would expect a robot to drive in a straight path parallel to the wall and not in a triangle shape driving at an angle and then returning to the same wall again. 
