@@ -27,7 +27,7 @@ The following overview of the state of the art consist of four main parts:
 \begin{enumerate}
     \item The general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. (Chapter \ref{sec:path_planning}).
     \item The recent approaches to hierarchical planning in complex multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in complex multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
-    \item The recent approaches to straight path planning are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight, deterministic and human-predictable?" (Chapter \ref{sec:straight_paths}).
+    \item The recent approaches to straight path planning are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight and human-predictable?" (Chapter \ref{sec:straight_paths}).
     \item The research gap and limitations of the state of the art is summarized (Chapter \ref{sec:research_gap}).
 \end{enumerate}
 
@@ -402,7 +402,7 @@ It can be seen, that the focus is either on the automatic hierarchy creation and
     \item Semantic and Topological Mapping using Intersection Identification (Has comparison on the AWS hospital map!)
 \end{enumerate}
 
-In this section the recent approaches to straight path planning are presented. This gives an overview of the relevant existing works corresponding to the second research question: "How to plan paths that are straight, deterministic and human-predictable?"
+In this section the recent approaches to straight path planning are presented. This gives an overview of the relevant existing works corresponding to the second research question: "How to plan paths that are straight and human-predictable?"
 
 A common approach in path planning is the creation of a roadmap. The advantages of roadmaps are that they are very efficient for replanning because the roadmap is not recalculated every time. Depending on the creation process roadmaps do not guarantee optimality but they provide a feasible answer within a short period of time. This is especially useful for motion planning in a higher dimension space for multi axis manipulators. The configuration space \(C\) in the case of plane 2D path planning has the same x and y axis as the real space. Obstacles in \(C\)-space are inflated by the size of the robot to find collision free paths.
 
@@ -433,14 +433,14 @@ Another approach for retrieving the topological map of an environment is the Str
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/20_state_of_the_art/htm_global_comparison.png}
-    \caption[Comparison between straight paths]{Comparison of skeleton generation, using the grid map obtained from \cite{beeson_towards_2005}. (a) GVD. (b) RGVG. (c) EVG with a sensory horizon of 1.25m. (d) HTM. Primary tracks, secondary tracks, and regions are marked in red, purple, and blue, respectively. (Source: \cite{hou_straight_2021})}
+    \caption[Comparison of generated topological maps]{Comparison of skeleton generation, using the grid map obtained from \cite{beeson_towards_2005}. (a) GVD. (b) RGVG. (c) EVG with a sensory horizon of 1.25m. (d) HTM. Primary tracks, secondary tracks, and regions are marked in red, purple, and blue, respectively. (Source: \cite{hou_straight_2021})}
     \label{fig:htm_global_comparison}
 \end{figure}
 
 The presented methods focus on the goal of extracting a topological map from the gridmap. The HTM also focuses on generating paths that a straight. Further discussion on the limitations of these approaches and the resulting research gap this work aims to address is done in Chapter \ref{sec:research_gap}. 
 
 %% ==============================
-\section{Research Gap and Limitations}
+\section{Research Gap}
 \label{sec:research_gap}
 %% ==============================
 
@@ -453,14 +453,36 @@ Research gap from previous approaches:
     \item Approaches for straight paths only work well in small corridors
 \end{enumerate}
 
-Table with an overview of all related work
-Author, algorithm, hierarchy levels, real robot, ROS1, ROS2, (automatic) hierarchy creation, Optimal, efficient replanning
+In Table \ref{tab:overview_q1} an overview on the state of the art to research Question 1: "How to navigate in complex multi-floor environments?" is given. The different approaches to hierarchical path planning are presented in Chapter \ref{sec:hierarchical_planning}, this Chapter discusses the limitations of these methods and shows the research gap for this work.
 
-Cagigas uses an environment with three hierarchy levels (floors, rooms and gridmap), no real robot or ROS, Manual hierarchy creation
-Seder only uses a 2D floor-level environment with two hierarchies (rooms and gridmap), no real robot or ROS, automatic bridge point detection
-Gregoric assumes a very simple multi-building environment where vertical bridge nodes are always directly above each other and connect only floors of the same building. Further buildings are assumed to have only one connection between each other on the ground floor. Although in complex environments bridges on upper floors, ramps or densely connected building sections are possible.
-Ryu uses only a plane 2D environment on a single floor and creates a H-Graph with two hierarchy levels. This approach is not extended for a higher level of hierarchy. The Proposed SIRRT* is a fast algorithm but does not guarantee optimality. 
-Wang implements a floor detection with CNN wich can be counted as a kind of hierarchy creation. But multi-floor planning is not discussed. Wang implements his work on a real robot with ROS 1.
-Dihman uses a different approach with a single weighted graph for hierarchy representation. It is not created automatically but he uses multiple robots ans exploration to obtain the gridmaps. This is also implemented on ROS 1.
+\begin{table}[]
+\centering
+\caption{Overview on the state of the art in hierarchical path planning}
+\label{tab:overview_q1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llllllll@{}}
+\toprule
+\textbf{Key topics} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Cagigas\\2005 \cite{cagigas_hierarchical_2005}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Seder\\2011 \cite{seder_hierarchical_2011}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Gregoric\\2022 \cite{gregoric_autonomous_2022}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Ryu\\2020 \cite{ryu_hierarchical_2020}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Wang\\2019 \cite{wang_autonomous_2019}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Dihman\\2020 \cite{dhiman_ros_2020}\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}{[}This work{]}\\2023\end{tabular}}} \\ \midrule
+\begin{tabular}[c]{@{}l@{}}Path planning\\ algorithm\end{tabular} & HD* & FHD* & E* & SIRRT* & A*' & \begin{tabular}[c]{@{}l@{}}? /\\ Dijkstra\end{tabular} & \begin{tabular}[c]{@{}l@{}}ILIR /\\ Dijkstra\end{tabular} \\
+\smallskip \\
+\begin{tabular}[c]{@{}l@{}}Efficient on-line\\ replanning\end{tabular} & Yes & Yes & Yes & No & No & No & Yes \\
+\smallskip \\
+Map source & 2D Sim & 2D Sim & \begin{tabular}[c]{@{}l@{}}Floor\\ plans\end{tabular} & SLAM & SLAM & \begin{tabular}[c]{@{}l@{}}SLAM\\ Multi-robot\end{tabular} & SLAM \\
+\begin{tabular}[c]{@{}l@{}}Hierarchy\\ creation\end{tabular} & Manual & \begin{tabular}[c]{@{}l@{}}Safety\\ cost mask\end{tabular} & \begin{tabular}[c]{@{}l@{}}Safety\\ cost mask,\\ matching\end{tabular} & \begin{tabular}[c]{@{}l@{}}Water-\\ shed\end{tabular} & \begin{tabular}[c]{@{}l@{}}CNN floor\\ detection\end{tabular} & Manual & Watershed \\
+\smallskip \\
+Hierarchy levels & 3 & 2 & 4+ & 2 & 3 & 3 & 4+ \\
+\smallskip \\
+\begin{tabular}[c]{@{}l@{}}Implementation\\ on real robot\end{tabular} & - & - & - & - & ROS 1 & ROS 1 & ROS 2 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
 
-The HTM also focuses on generating paths that a straight. This makes these paths predictable for humans walking in the same area as the mobile robot. Also all of these approaches are deterministic. This means, given the same gridmap, these algorithms always produce the same output path. There is not a probabilistic function involved which generates random points like in the RRT or PRM. A path that is deterministic is also more predictable for humans as the robot behaves the same. The advantage is that humans working in the same space can learn the paths of the mobile robot and can predict areas where a robot might drive through. This is useful for the hospital environment of the PeTRA use-case. However the generated paths or not ideal for open spaces and large rooms as seen in Figure \ref{fig:htm_global_comparison} d). Assuming this is a lobby or other large room where people might wait and walk between doors. The path generated by the HTM are not intuitive. One would expect a robot to drive in a straight path parallel to the wall and not in a triangle shape driving at an angle and then returning to the same wall again. 
+The earlier work of Cagigas and Seder focuses on solving the planning problem as a whole. They develop one planner which solves the global path through the hierarchy as well as the path on the lowest gridmap level. Additionally they use a D* algorithm which is very efficient for replanning when obstacles are detected. This approach results from the fact, that to this time no open source framework for path planning, like ROS, existed. This required to solve most robotic problems from the ground up. With the widespread distribution of ROS many open source implementations for common planners exist. This has the advantage of profiting from efficiently implemented planners in an integrated framework and allows to focus on developing just the missing part. This development is seen with Wang and Dihman, as both use ROS 1 and don't implement the basic planners themselves. The disadvantage is that solution for the entire problem of hierarchy solving and path planning combined could be more efficient. However reusability and community-defined interfaces enable the fast development in robotics research and thus building upon existing software is currently preferred. The analysis of available literature shows that with the tools of ROS 2 no such open-source solution exists. The goal of this work is to develop a hierarchical path planner by using the existing frame work of ROS 2 and Nav2. Additionally the proposed straight roadmap on the lowest level allows for efficient replanning.
+
+Gregoric uses the path planning ideas from Seder and focuses on automatic generation a hierarchical graph of the environment from floor plans. This extends the previous approaches as the number of levels are theoretically infinite. Although automatic hierarchy creation is only shown for room segmentation and floor matching. Additionally a very simple multi-building environment is assumed, where vertical bridge nodes are always directly above each other and connect only floors of the same building. Further buildings are assumed to have only one connection between each other on the ground floor. Although in complex environments bridges on upper floors, ramps or densely connected building sections are possible. Ryu in comparison only focuses on hierarchy creation for two levels but proposes a new method for automatic room segmentation from SLAMed gridmaps. The goal of this work is leveraging the ideas of Gregoric of n-level hierarchies for complex environments with arbitrary connections and using the approach from Ryu for automatic room segmentation. As both works have not been implemented an a real robot or are available as open-source, the developed algorithms should be easy to use on a real mobile robot with ROS 2.
+
+For the problem of straight path planning, an comparison of existing approaches can be seen in Figure \ref{fig:htm_global_comparison}. Only Hou focuses on creating straight paths, the most common approach for a straight indoor roadmap is manual waypoint selection. One promising tool for that is OpenRMF from OpenRobotics \cite{openrobotics_open-rmf_2023} which is currently in development. The aim of this tool is mainly fleet management and interoperability between robot vendors but it also uses a roadmap of preplanned straight paths. There is currently no plan to generate these straight paths automatically. For real production environments this is due to safety reasons. However if there would be a tool which initially proposes straight paths that can be refined by manually moving specific waypoints it would reduce the time for implementation drastically. The goal of this work is develop such an algorithm for an initial straight roadmap.
+
+The HTM approach from Hou generates mostly paths that a straight. This makes these paths predictable for humans walking in the same area as the mobile robot. Also all of these approaches are deterministic. This means, given the same gridmap, these algorithms always produce the same output path. There is not a probabilistic function involved which generates random points like in the RRT or PRM. A path that is deterministic is also more predictable for humans as the robot behaves the same. The advantage is that humans working in the same space can learn the paths of the mobile robot and can predict areas where a robot might drive through. This is useful for the hospital environment of the PeTRA use-case. However the generated paths or not ideal for open spaces and large rooms as seen in Figure \ref{fig:htm_global_comparison} d). Assuming this is a lobby or other large room where people might wait and walk between doors. The path generated by the HTM are not intuitive. One would expect a robot to drive in a straight path parallel to the wall and not in a triangle shape driving at an angle and then returning to the same wall again. This requires a metric for the quality of the straight paths and to measure the effect of disturbing the public space used by other people. This work compares the proposed roadmap planner against other approaches and proposes a metric for the disturbance of public space.
+
+In general this research field is not very active. There are a few algorithms and limited proof of concept implementations but there is a lack for a solution of the problem in its entirety. In particular a comprehensive benchmark environment for multi-floor scenarios is needed to test and compare methods with other researchers. Additionally the hierarchy creation for a large, complex environment is a slow and manual process which is not completely solved yet. Both of these problems are out of scope for this work, but once solved could pave the way for the easy commission of large fleets of robots in a multi-floor building. In context of the increasing number of tasks that can be automated with the advanced capabilities of AI and scene understanding more and more service tasks could be carried out by mobile robots.
