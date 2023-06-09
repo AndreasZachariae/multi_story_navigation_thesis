@@ -26,9 +26,9 @@ General theory:
 The following overview of the state of the art consist of four main parts:
 \begin{enumerate}
     \item The general theory of path planning in mobile robotics is presented. This includes the most common algorithms for path planning, and their applications in real robotic systems. (Chapter \ref{sec:path_planning}).
-    \item The recent approaches to hierarchical planning in complex multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in complex multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
+    \item The recent approaches to hierarchical path planning in complex multi-floor environments are presented. This shows the existing approaches to the first research question: "How to navigate in complex multi-floor environments?" (Chapter \ref{sec:hierarchical_planning}).
     \item The recent approaches to straight path planning are presented. This shows the existing approaches to the second research question: "How to plan paths that are straight and human-predictable?" (Chapter \ref{sec:straight_paths}).
-    \item The research gap and limitations of the state of the art is summarized (Chapter \ref{sec:research_gap}).
+    \item The research gap and limitations of the state of the art is summarized in Chapter \ref{sec:research_gap}.
 \end{enumerate}
 
 %% ==============================
@@ -50,17 +50,35 @@ The scope of this work is limited to extending the capabilities of the global pl
 
 %% ==============================
 \subsection{Path Planning Algorithms}
-Planning a path is a major challenge in robotics and is necessary for mobility. The path from the robot's current location to the goal can be planned in two ways: deterministically or probabilistically. Deterministic planners use algorithms that always deliver the same results with the same input. Probabilistic planners, on the other hand, are based on randomness and produce different results for the same input. The map on which deterministic planners are based is usually discretised into a lattice. In an informed search, heuristics can be used to tell whether one grid field is closer to the target configuration than another. According to Burgard in \cite{XXBurgard}, the performance of a search algorithm is measured in four different ways:
+Planning a path is a major challenge in robotics and is necessary for mobility. The path from the robot's current location to the goal can be planned in two ways: deterministically or probabilistically. Deterministic planners use algorithms that always deliver the same results with the same input. Probabilistic planners, on the other hand, are based on randomness and produce different results for the same input. The map on which deterministic planners are based is usually discretised into a lattice. In an informed search, heuristics can be used to tell whether one grid field is closer to the target configuration than another. According to Burgard \cite{burgard_introduction_2021}, the performance of a search algorithm is measured in four different ways:
 \begin{enumerate}
     \item Completeness:
-    Does the algorithm find the solution if there is one?
+    Does the algorithm find a solution when there is one?
     \item Optimality:
-    Is the solution the best of all possible solutions in terms of path cost?
+    Is the solution the best one of all possible solutions in terms of path cost?
     \item Time complexity:
     How long does it take to find a solution?
     \item Space complexity:
     How much memory is needed to perform the search?
 \end{enumerate}
+
+Among the deterministic planners there are various prominent representatives, such as the Dijkstra or the A* algorithm as a special form of it. The A* was originally proposed by Hart, Nilsson and Raphael \cite{hart_formal_1968} and is frequently used in research. A* plans a path from the start configuration to the target configuration. During expansion, every new node is evaluated with the metric \ref{equ:metric}. 
+\begin{equation} \label{equ:metric}
+    f(n) = g(n) + h(n)
+\end{equation}
+The node with the lowest metric score is expanded next. The metric consists of the cost of the previously traveled path \(g(n)\) up to the current node \(n\) added with the estimated cost of the remaining path to the goal \(h(n)\). This estimation is calculated with a heuristic like the euclidean distance or Manhattan distance for gridmaps. It is important that the heuristic never over-estimates the real costs to ensure the optimality of the A* algorithm. In planar 2D space there is no path shorter than the direct line with length of the euclidean distance. The expansion is done until the goal node is part of the expanded nodes. The shortest path is then traced back by following the parent nodes until the start.
+
+The Dijkstra algorithm \cite{dijkstra_note_1959} is a generalizied form of the A* and only considers the previous costs \(g(n)\) during expansion. In general this leads to more nodes beeing searched and a longer search time for the goal than A*. The time and space complexity of Dijkstra are higher than for A*. Both algorithms have the advantage of providing complete and optimal solutions.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/20_state_of_the_art/rrt.png}
+    \caption[The RRT algorithm]{Rapidly-exploring Random Tree (RRT) after 45 (left) and 2345 (right) iterations from the start node in each center. (Source: \cite{burgard_introduction_2021})}
+    \label{fig:rrt}
+\end{figure}
+
+In contrast to deterministic planners, probabilistic planners are based on the principle of chance. One example of many is the RRT. New nodes are randomly selected in the search field, then an attempt is made to connect these with the closest node, which is already part of the tree. This connections has to satisfy two conditions: First there is no obstacle in the direct connection line and second the distance to the tree is not bigger than \(d_{max}\). If the first criterion fails, the selected node is discarded. If only the second criterion fails, a new node is created on the connecting line with the distance \(d_{max}\) and added to the tree. This procedure creates large trees after only a few iterations, as can be seen in Figure 2.3. With an appropriately chosen \(d_{max}\), this method needs significantly fewer nodes to reach the goal than an A*. In addition with the number of nodes approaching infinity, this algorithm also moves in the direction of completeness, but this method is not optimal. Time and memory complexity are dependent on \(d_{max}\).
+
 
 %% ==============================
 \subsection{The Robot Operating System 2}
