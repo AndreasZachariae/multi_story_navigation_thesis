@@ -34,9 +34,11 @@ Especially in the application area of service robotics in shared human-robot spa
 \section{Problem Statement}
 \label{sec:problem_statement}
 %% ==============================
-Mobile robots are increasingly being used in large environments, such as hospitals, to improve efficiency and reduce human workload. However, navigating over multiple stories poses a significant challenge for mobile robots, as it requires a planner that can account for complex spatial configurations and still find the shortest path. Moreover, the planned path must be straight, deterministic and predictable for humans who could be walking in the same space as the robot. Therefore, the specific research problem addressed in this thesis is the development of a planner that can enable a mobile robot to navigate over multiple stories in complex environments, while ensuring a straight and human-predictable path. 
+Mobile robots are increasingly being used in large environments, such as hospitals, to improve efficiency and reduce human workload. However, navigating over multiple floors poses a significant challenge for mobile robots, as it requires a planner that can account for complex spatial configurations and still find the shortest path. Moreover, the planned path must be straight, deterministic and predictable for humans who could be walking in the same space as the robot. Therefore, the specific research problem addressed in this thesis is the development of a planner that can enable a mobile robot to navigate over multiple floors in complex environments, while ensuring a straight and human-predictable path. 
 
-The ability to navigate over multiple stories is important for mobile robots in large, complex environments, as it can significantly increase their utility and effectiveness. For instance, in hospitals, mobile robots could be used for tasks such as delivering medicines, transporting equipment, or guiding patients and visitors. Although for specific use-cases proprietary solutions exist, the lack of an open-source planner for multi-floor navigation is a major bottleneck in the development of mobile robots for service applications. Moreover, the need for a straight and human-predictable path is essential for ensuring safety and reducing the risk of collisions or accidents in shared human-robot spaces.
+The ability to navigate over multiple floors is important for mobile robots in large, complex environments, as it can significantly increase their utility and effectiveness. For instance, in hospitals, mobile robots could be used for tasks such as delivering medicines, transporting equipment, or guiding patients and visitors. Although for specific use-cases proprietary solutions exist, the lack of an open-source planner for multi-floor navigation is a major bottleneck in the development of mobile robots for service applications. 
+
+Additionally, the need for a straight and human-predictable path is essential for ensuring safety and reducing the risk of collisions or accidents in shared human-robot spaces. \todo{example where robot collide with oath of humans}
 
 The two main research questions addressed in this thesis are:
 \begin{enumerate}
@@ -47,7 +49,7 @@ The two main research questions addressed in this thesis are:
 The scope of this work is limited to the development of a planner that plans a priori with previously collected information, as opposed to a controller that follows the planned path and adapts to dynamic obstacles. The main assumption is that a map of the entire environment has been previously recorded and provides a complete representation of the plannable space.
 
 %% ==============================
-\section{Use case PeTRA}
+\section{Use Case PeTRA}
 \label{sec:use_case}
 %% ==============================
 The use case of this work is a mobile robot that is used to support staff with patient logistics in care facilities. This includes tasks such as delivering medicines and transporting a patient to examinations. This work is part of the \gls{petra} research project, which is funded by the \gls{bmbf} \cite{bmbf-internetredaktion_bekanntmachung_2018} and developed at the \gls{iras} of the \gls{hka}.
