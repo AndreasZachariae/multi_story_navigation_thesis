@@ -73,13 +73,11 @@ This results in a metric for the disturbance of public space for a single room w
       \centering
       \includegraphics[width=\textwidth]{figures/30_methods/room9_disturbance_astar_smooth.png}
       \caption{Planner: A*, \(D = 0.95\)}
-      \label{fig:sub1}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
       \centering
       \includegraphics[width=.975\textwidth]{figures/30_methods/room9_disturbance_ilir_smooth.png}
       \caption{Planner: ILIR, \(D = 0.20\)}
-      \label{fig:sub2}
     \end{subfigure}
     \caption[Example of the metric for disturbance of public space]{Example of the metric for disturbance of public space with \(n_r=10\), \(n_b=9\), \(n_{\text{paths}}=171\). The area of the original room \(R\) in yellow and turquoise, the paths and the walls in purple and the largest free area \(CC_{\text{free, max}}\) in turquoise.}
     \label{fig:disturbance_example}
@@ -89,11 +87,26 @@ This results in a metric for the disturbance of public space for a single room w
 \section{Simulation}
 \label{sec:simulation}
 %% ==============================
-After developing the hierarchy creation and the two-level hierarchical planning a more complex environment was needed to evaluate the hierarchical planning with arbitrary hierarchical levels and connections between them. For this purpose the campus of our research lab was modeled as graph and used for planning. This environment is complex in means of hierarchical connections, for example some stairs are connecting the second floor diagonal to the terrace of the first floor, which is itself shaped in a ring connecting to all other buildings. This makes this environment more complex than a simple building with one vertical connection through an elevator as used by previous work, like \cite{gregoric_autonomous_2022} or \cite{cagigas_hierarchical_2005}. A rendering of the campus and the corresponding graph can bee seen in Figure \ref{}
+After developing the hierarchy creation and the two-level hierarchical planning a more complex environment was needed to evaluate the hierarchical planning with arbitrary hierarchical levels and connections between them. For this purpose the campus of our research lab was modeled as graph and used for planning. This environment is complex in means of hierarchical connections, for example some stairs are connecting the second floor diagonal to the terrace of the first floor, which is itself shaped in a ring connecting to all other buildings. This makes this environment more complex than a simple building with one vertical connection through an elevator as used by previous work, like \cite{gregoric_autonomous_2022} or \cite{cagigas_hierarchical_2005}. A rendering of the campus and the corresponding graph can bee seen in Figure \ref{fig:ltc_rendering}
 
-\todo{insert two sided picture of LTC real and LTC graph}
+\begin{figure}[h]
+    \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/30_methods/ltc_rendering.png}
+      \caption{Rendering}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/30_methods/ltc_graph.png}
+      \caption{Graph representation}
+    \end{subfigure}
+    \caption[Rendering and graph representation of the \gls{iras} research campus]{Rendering a) and graph representation b) of the \gls{iras} research campus}
+    \label{fig:ltc_rendering}
+\end{figure}
 
-Both concept, the hierarchical planner and the straight path planner were combined and integrated into the \gls{nav_2} stack for \gls{ros_2}. For fast testing this was done in an simulated hospital environment. This helps in debugging and accelerates the developement. The publicly available "AWS RoboMaker Hospital World" from Amazon \cite{aws_robotics_aws_2023} was used. In Figure \ref{fig:aws_hospital} the simulated hospital is shown. The advantage of this environment is that it also provides models for two and three floors. From this simulation the gap to the real world is small and it was finally implemented on the real PeTRA robot.
+Both concepts, the hierarchical planner and the straight path planner were combined and integrated into the \gls{nav_2} stack for \gls{ros_2}. For fast testing this was done in an simulated hospital environment. This helps in debugging and accelerates the developement. The publicly available "AWS RoboMaker Hospital World" from Amazon \cite{aws_robotics_aws_2023} was used. In Figure \ref{fig:aws_hospital} the simulated hospital is shown. The advantage of this environment is that it also provides models for two and three floors. From this simulation the gap to the real world is small and it was finally implemented on the real PeTRA robot.
 
 \begin{figure}[h]
     \centering
