@@ -147,7 +147,7 @@ The first step for path planning is converting the environment in a Shapely obje
 
 In each room the largest interior rectangles are searched in an iterative process and combined to a polygon. The algorithm is from Marzeh et. al \cite{marzeh_algorithm_2019} and the used python implementation from Weber \cite{weber_largest_2023}. The proposed Iterative Largest Interior Rectangle (ILIR) algorithm extends these ideas by repeatedly searching the largest rectangle. Each rectangle is then subtracted from the original area and the same process is repeated with the remaining area. This produces not only the largest rectangle but also a polygon which is aligned to the axis of the coordinate frame. Just finding the largest interior polygon would not be useful as with high resolution this would just approximate the original shape. Also the edges of this polygon would not be parallel to the walls of the room which is an important requirement for the proposed algorithm. Additionally for each rectangle it is decided if the shape belongs more to a corridor or to a room based on predefined parameters. For an corridor the rectangle is collapsed to a straight line to provide a better path for the robot. In Algorithm \ref{lst:pseudo_code_ilir} the pseudo code of the ILIR straight path planner is shown.
 
-\lstset{language=C++, mathescape=true, caption={Pseudo code of the ILIR straight path planner}, label={lst:pseudo_code_ilir}, morekeywords={from, to, is, input, output, each, in, end}}
+\lstset{language=C++, mathescape=true, caption={Pseudo code of the ILIR straight path planner}, label={lst:pseudo_code_ilir}, morekeywords={from, to, is, input, output, each, in, end, do, then}}
 \begin{lstlisting}[float=h]
 input: gridmap, parameter
 output: roadmap
@@ -156,25 +156,25 @@ room_list $\gets$ markerControlledWatershed(gridmap)
 
 bridge_points $\gets$ extractBridgePoints(room_list)
 
-for each room in room_list:
+for each room in room_list do:
 
-    while largest_contour.area > parameter.min_area:
+    while largest_contour.area > parameter.min_area do:
     
         largest_contour $\gets$ maxContourByArea(room)
             
         largest_rectangle $\gets$ largestInteriorRectangle(largest_contour)
 
-        if isCorridor(largest_rectangle):
-            roadmap $\gets$ centerLine(largest_rectangle)
+        if isCorridor(largest_rectangle) then:
+            roadmap.add(centerLine(largest_rectangle))
         else
-            roadmap $\gets$ largest_rectangle
+            roadmap.add(largest_rectangle)
 
         room $\gets$ (room - largest_rectangle)
     end
 
     roadmap $\gets$ mergeRectangles(roadmap)
     
-    roadmap $\gets$ connectBridgePoints(bridge_points)
+    roadmap.add(connectBridgePoints(bridge_points))
 end
 \end{lstlisting}
 
@@ -183,27 +183,32 @@ In Figure \ref{fig:ilir_room_roadmap} the ILIR algorithm is applied on room 2 of
 \begin{figure}[h]
     \captionsetup[subfigure]{justification=centering}
     \centering
-    \begin{subfigure}{.31\textwidth}
+    \begin{subfigure}{.235\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figures/50_implementation/ryu_room2_clean.png}
       \caption{Room after segmentation}
     \end{subfigure}%
-    \begin{subfigure}{.33\textwidth}
+    \begin{subfigure}{.25\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figures/50_implementation/ryu_room2_rectangles.png}
-      \caption{largest interior rectangles}
+      \caption{Largest interior rectangles}
     \end{subfigure}%
-    \begin{subfigure}{.33\textwidth}
+    \begin{subfigure}{.25\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figures/50_implementation/ryu_room2_roadmap.png}
-      \caption{Roadmap with ILIR}
+      \caption{Roadmap as produced by ILIR}
+    \end{subfigure}%
+    \begin{subfigure}{.25\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/50_implementation/ryu_room2_roadmap_graph.png}
+      \caption{Roadmap converted to a graph}
     \end{subfigure}
-    \caption[Application of the ILIR straight path planner on room 2 from the benchmark map]{Application of the ILIR straight path planner on room 2 from the benchmark map. The red obstacles are enlarged by the radius of the robot to ensure collision free paths.}
+    \caption[Application of the ILIR straight path planner on room 2 from the benchmark map]{Application of the ILIR straight path planner on room 2 from the benchmark map. The red obstacles are enlarged by the radius of the robot to ensure collision free paths. Note that the y-axis of the graph representation is inverted to the other images.}
     \label{fig:ilir_room_roadmap}
 \end{figure}
 \todo{Add image of roadmap graph room2 and section in text abput it}
 
-As the last step of the ILIR algorithm, the door of neighbouring rooms are connected to the merged rectangles. In Figure \ref{fig:ilir_room_roadmap} (a) three doors to other rooms can bee seen as yellow points. These are then connected to the polygon and form the resulting roadmap in (c). These connections are created first by checking the direct straight line with the shortest distance between the door and the roadmap. If this line is in collision, an A* search is done to find the shortest possible connections. This resulting path from A* will then be smoothed and turned into a series of straight lines which are then added to the roadmap. For the actual path planning in the real world, the robot can be at an random valid position in the room and first has to find a collision free path to the roadmap before it can follow the roadmap the door of the next room or an elevator of the next floor. This connection of start and goal positions that or not on the roadmap is done by the same process and can bee seen in the next chapter in Algorithm \ref{}. To make this roadmap searchable in a H-Graph it os converted to nodes and edges in the corresponding room graph (c). The connections in z-axis reoresent the hierarchical connections to another graph. They have no path cost and therefore will not be considered in the total distance of the path. By repeatedly applying the ILIR algorithm to each room in the previously segmented gridmap the levels H1 and H2 of the H-Graph can be automatically generated. In Figure \ref{fig:ryu_roadmap} a visualization of all the roadmaps of each room combined and overlayed on the image from the watershed is showed.
+As the last step of the ILIR algorithm, the door of neighbouring rooms are connected to the merged rectangles. In Figure \ref{fig:ilir_room_roadmap} (a) three doors to other rooms can bee seen as yellow points. These are then connected to the polygon and form the resulting roadmap in (c). These connections are created first by checking the direct straight line with the shortest distance between the door and the roadmap. If this line is in collision, an A* search is done to find the shortest possible connections. This resulting path from A* will then be smoothed and turned into a series of straight lines which are then added to the roadmap. For the actual path planning in the real world, the robot can be at an random valid position in the room and first has to find a collision free path to the roadmap before it can follow the roadmap the door of the next room or an elevator of the next floor. This connection of start and goal positions that or not on the roadmap is done by the same process and can bee seen in the next chapter in Algorithm \ref{lst:pseudo_code_ilir}. To make this roadmap searchable in a H-Graph it os converted to nodes and edges in the corresponding room graph (d). The connections in z-axis represent the hierarchical connections to another graph. They have no path cost and therefore will not be considered in the total distance of the path. By repeatedly applying the ILIR algorithm to each room in the previously segmented gridmap the levels H1 and H2 of the H-Graph can be automatically generated. In Figure \ref{fig:ryu_roadmap} a visualization of all the roadmaps of each room combined and overlayed on the image from the watershed is showed.
 
 \begin{figure}[h]
     \centering
@@ -221,11 +226,17 @@ The ILIR algorithm is able to find a solution if a solution exists. This is ensu
 \label{sec:impl_hierarchical_planning}
 %% ==============================
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/50_implementation/h_graph_uml.png}
+    \caption[UML diagram of the H-Graph implementation]{UML diagram of the H-Graph implementation. Blue components were taken from the community, green components were developed in this work.}
+    \label{fig:h_graph_uml}
+\end{figure}
 
 Pseudocode of recursive planning function
 
 
-\lstset{language=python, mathescape=true, caption={Unique H-Graph positions and path representation}, label={lst:pseudo_code_ilir}, morekeywords={from, to, is, input, output, each, in, end}}
+\lstset{language=python, mathescape=true, caption={Unique H-Graph positions and path representation}, label={lst:pseudo_code_datastructure}, morekeywords={from, to, is, input, output, each, in, end}}
 \begin{lstlisting}[float=h]
 # general description of a unique position:
 $p = \{p_{Hn}, p_{Hn-1}, ..., p_{H1}\}$
@@ -261,26 +272,27 @@ path = {
 }
 \end{lstlisting}
 
-\lstset{language=C++, mathescape=true, caption={Pseudo code of Hierarchical Path Planning}, label={lst:pseudo_code_ilir}, morekeywords={from, to, is, input, output, each, in, end}}
+\lstset{language=C++, mathescape=true, caption={Pseudo code of Hierarchical Path Planning}, label={lst:pseudo_code_ilir}, morekeywords={from, to, is, input, output, each, in, end, then}}
 \begin{lstlisting}[float=h]
 input: start_hierarchy, goal_hierarchy, h_graph
 output: path
 
-for hierarchy in [start_hierarchy, goal_hierarchy]:
+for hierarchy in [start_hierarchy, goal_hierarchy] do:
 
     room, pos $\gets$ getHierarchyH2(hierarchy)
     
-    if pos not in room.roadmap:
+    if pos not in room.roadmap then:
     
-        if noCollision(straightLine(pos, room.roadmap)):
+        if noCollision(straightLine(pos, room.roadmap)) then:
         
             path $\gets$ straightLine(pos, room.roadmap)
             
-            room.roadmap $\gets$ path
+            room.roadmap.add(path)
         else:
             path $\gets$ A*Planner(pos, room.roadmap)
             
-            room.roadmap $\gets$ path
+            room.roadmap.add(path)
+end
 
 path $\gets$ RecursiveHierarchicalPlanner(
             start_hierarchy, goal_hierarchy, h_graph)
@@ -288,6 +300,37 @@ path $\gets$ RecursiveHierarchicalPlanner(
 \end{lstlisting}
 
 Pseudocode of plan function with adding positions not on the roadmap
+
+\lstset{language=C++, mathescape=true, caption={Pseudo code of recursive planning function}, label={lst:pseudo_code_recursive}, morekeywords={from, to, is, input, output, each, in, end, then, enumerator, algorithm}}
+\begin{lstlisting}[float=h]
+algorithm: planRecursiveHierarchical
+input: child_path, start_hierarchy, goal_hierarchy, hierarchy_level
+output: path
+
+for node in child_path and enumerator i do:
+
+    if isLeaf(node) or isBridge(node) then:
+        path[node] $\gets$ {}
+        continue
+
+    if node is child_path[0] then:
+        child_graph_start $\gets$ start_hierarchy[hierarchy_level+1]
+    else:
+        child_graph_start $\gets$ getBridgeTo(node, child_path[i-1])
+
+    if node is child_path[-1] then:
+        child_graph_goal $\gets$ goal_hierarchy[hierarchy_level+1]
+    else:
+        child_graph_goal $\gets$ getBridgeTo(node, child_path[i+1])
+
+    next_child_path $\gets$ node.planInChildGraphWithDijstra(child_graph_start, child_graph_goal)
+
+    path[node] $\gets$ node.planRecursiveHierarchical(next_child_path, start_hierarchy, goal_hierarchy, (hierarchy_level+1))
+end
+
+return path
+
+\end{lstlisting}
 
 Time complexity of Dijstra and recursion
 

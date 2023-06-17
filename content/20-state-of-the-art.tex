@@ -202,16 +202,17 @@ The Decorator is a type of control node that has only one child. It allows the s
     \label{fig:sequence}
 \end{figure}
 
-\lstset{language=C++, mathescape=true, caption={Algorithm of a Sequence with \textit{N} childs}, label={lst:pseudo_code_sequence}, morekeywords={from, to, is}}
+\lstset{language=C++, mathescape=true, caption={Algorithm of a Sequence with \textit{N} childs}, label={lst:pseudo_code_sequence}, morekeywords={from, to, is, do, then}}
 \begin{lstlisting}[float=h]
-for i from 1 to %\textit{N}% do
+for i from 1 to %\textit{N}% do:
     child_status $\gets$ tick(child[i])
     
-    if child_status is %\textit{Running}%
+    if child_status is %\textit{Running}% then:
         return %\textit{Running}%
         
-    if child_status is %\textit{Failure}%
+    if child_status is %\textit{Failure}% then:
         return %\textit{Failure}%
+end
 
 return %\textit{Success}%
 \end{lstlisting}
@@ -226,21 +227,22 @@ The Sequence starts its children from left to right in the graphical representat
     \label{fig:fallback}
   \end{figure}
   
-  \lstset{language=C++, mathescape=true, caption={Algorithm of a Fallback with \textit{N} childs}, label={lst:pseudo_code_fallback}, morekeywords={from, to, is}}
-  \begin{lstlisting}[float=h]
-  for i from 1 to %\textit{N}% do
-      child_status $\gets$ tick(child[i])
-      
-      if child_status is %\textit{Running}%
-          return %\textit{Running}%
-          
-      if child_status is %\textit{Success}%
-          return %\textit{Success}%
+\lstset{language=C++, mathescape=true, caption={Algorithm of a Fallback with \textit{N} childs}, label={lst:pseudo_code_fallback}, morekeywords={from, to, is, do, then}}
+\begin{lstlisting}[float=h]
+for i from 1 to %\textit{N}% do:
+  child_status $\gets$ tick(child[i])
   
-  return %\textit{Failure}%
-  \end{lstlisting}
+  if child_status is %\textit{Running}% then:
+      return %\textit{Running}%
+      
+  if child_status is %\textit{Success}% then:
+      return %\textit{Success}%
+end
 
-  A Fallback node (also known as Selector) executes only one child successfully, unlike the Sequence. All children are updated from left to right, as shown in Figure \ref{fig:fallback} and Algorithm \ref{lst:pseudo_code_fallback}. Once a child reaches the Success state, the Fallback is completed. If a child returns Failure, the next child is started.
+return %\textit{Failure}%
+\end{lstlisting}
+
+A Fallback node (also known as Selector) executes only one child successfully, unlike the Sequence. All children are updated from left to right, as shown in Figure \ref{fig:fallback} and Algorithm \ref{lst:pseudo_code_fallback}. Once a child reaches the Success state, the Fallback is completed. If a child returns Failure, the next child is started.
 
 \begin{figure}[h]
     \centering
@@ -249,15 +251,16 @@ The Sequence starts its children from left to right in the graphical representat
     \label{fig:parallel}
 \end{figure}
   
-\lstset{language=C++, mathescape=true, caption={Algorithm of a Parallel with \textit{N} childs and success count \textit{M}}, label={lst:pseudo_code_parallel}, morekeywords={from, to, is}}
+\lstset{language=C++, mathescape=true, caption={Algorithm of a Parallel with \textit{N} childs and success count \textit{M}}, label={lst:pseudo_code_parallel}, morekeywords={from, to, is, do, then}}
 \begin{lstlisting}[float=h]
-for i from 1 to %\textit{N}% do
+for i from 1 to %\textit{N}% do:
     child_status[i] $\gets$ tick(child[i])
+end
     
-if success_count(child_status) >= %\textit{M}%
+if success_count(child_status) >= %\textit{M}% then:
     return %\textit{Success}%
         
-if failure_count(child_status) > (%\textit{N}% - %\textit{M}%)
+if failure_count(child_status) > (%\textit{N}% - %\textit{M}%) then:
     return %\textit{Failure}%
 
 return %\textit{Running}%
