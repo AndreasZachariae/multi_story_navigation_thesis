@@ -4,12 +4,28 @@
 %% ==============================
 Questions to ask:
 \begin{enumerate}
-    \item Summarize the most relevant findings of your work
-    \item What answer can you give to your research question?
-    \item What contribution do you add to your topic?
-    \item What can be done in future work to improve in your topic?
+    \item What are the main contributions of the work? 
+    \item How do the contributions relate to the research questions or hypotheses? 
+    \item Acknowledge any limitations or weaknesses in your study and suggest areas for future research. 
+    \item Describe any potential applications or implications of your research for practice, policy, or further research in your field. 
 \end{enumerate}
 
+
+This work seeks to answer the two research questions posed in the introduction. For better readability they are repeated here:
+
+\begin{enumerate}
+    \item How to navigate in complex multi-floor environments?
+    \item How to plan paths that are straight and human-predictable?
+\end{enumerate}
+
+For both questions a concept and implementation was described in this thesis. To solve the navigation in a complex multi-floor environment, a hierarchical planner is proposed that uses a H-Graph to model any complex environment. In this graph a search is conducted that yields the optimal solution path which includes navigating between rooms, with elevators to different floors or changing the building. This hierarchical planning algorithm can be extended to a theoretically unlimited number of hierarchy levels depending on the needs of the environments. By providing a plugin for the commonly used \gls{nav_2} stack, it can be used for any mobile robot using the ROS 2 framework. A Behavior tree coordinates the actions required to perform a full multi-story navigation task. It was shown in this work that the implementation of this concept works for an complex graph modeled from the \gls{iras} research campus as well as for a two-floor hospital simulation. Three mobile robots were used in simulation to verify the interchangeability and possible application for a real robot. Finally the system was partially implemented on the PeTRA robot. Due to proprietary drivers and problems with the ROS 1 bridge, the path planning was not done with the proposed planners but with default implementations instead. The overall behavior tree of the multi-story navigation was successfully applied.
+
+The second research question focuses on the PeTRA use-case of multi-floor service tasks in hospitals. For this environment the coexistence with human workers is a major challenge. It is required that a mobile robot does not disturb the normal daily work in the area and simultaneously follows a predictable behavior to avoid collisions. These requirements are solved by the proposed straight path planner which provides a roadmap of deterministic paths that are close to the walls and avoids the disturbance of large public spaces. The proposed ILIR planner uses the gridmap of a room to iteratively find the largest interior rectangles. These are combined to a polygon and connected with all bridge points like doors or elevators. The created roadmap is then used for efficiently plan paths and in combination with a controller for collision avoidance navigate the mobile robot to its goal. By comparing the retrieved paths on a benchmark map to different classical path planners like A*, PRM and RRT, it can be shown, that the ILIR method plans paths that are generally closer to the walls, less fluctuating while being the fastest or second fastest planner depending on the benchmark room. Also on the newly introduced metric for measureing the disturbance of public space, the ILIR planner performs up to 67 percentage-points better than the second best. Furthermore through qualitative comparison to planners from related work in the field, it is shown that the paths are more straight and better predictable for humans.
+
+%% ==============================
+\section{Contributions}
+\label{sec:Contributions}
+%% ==============================
 
 The main contributions of this thesis are:
 \begin{itemize}
@@ -22,3 +38,8 @@ The main contributions of this thesis are:
 \end{itemize}
 
 While the developed 2D planner is extensively evaluated in a simple 2D environment, the hierarchical planner is tested in a 3D simulation with a realistic environment.
+
+%% ==============================
+\section{Future Work}
+\label{sec:future_work}
+%% ==============================
