@@ -1,10 +1,3 @@
 \Abstract{
-    \begin{enumerate}
-        \item Was ist die Problemstellung der Arbeit?
-        \item Welche Forschungsfrage wird beantwortet?
-        \item Was ist die Methodik der Forschung?
-        \item Was sind die relevantesten Ergebnisse?
-        \item Wie werden die Ergebnisse interpretiert?
-    \end{enumerate}
-Deutsche Zusammenfassung.
+Die Navigation über mehrere Stockwerke ist notwendig, um den Einsatzbereich mobiler Roboter zu erweitern. Insbesondere bei Servicerobotern in Krankenhäusern könnte die Übernahme von Aufgaben über mehrere Stockwerke hinweg dem Arbeitskräftemangel entgegenwirken. Um in Bereiche fahren zu können, in denen Menschen arbeiten, muss der Weg gerade und vorhersehbar sein. Ziel dieser Arbeit ist es, eine Lösung für die stockwerkübergreifende Navigation in beliebig komplexen Umgebungen zu finden und dabei die Störung des öffentlichen Raums zu vermeiden. Dazu wird ein hierarchischer Graph (H-Graph) der Umgebung erstellt und der optimale Weg gefunden. Auf unterster Ebene wird eine deterministische Roadmap mit geraden Wegen erzeugt, indem iterativ die größten inneren Rechtecke (ILIR) gefunden und mit Türen oder Aufzügen verbunden werden. Die gesamte Navigation über mehrere Stockwerke wird durch einen Verhaltensbaum (BT) koordiniert. Im Vergleich mit gängigen Algorithmen wie A*, PRM und RRT auf etablierten Benchmarks kann gezeigt werden, dass der ILIR-Algorithmus der schnellste Planer ist und in der neuen Metrik zur Messung der Störung des öffentlichen Raums um bis zu 0,72 \%-Punkte besser ist als der nächstbeste Planer. Ein qualitativer Vergleich mit anderen Arbeiten zeigt, dass die generierte Roadmap geradliniger und für den Menschen besser vorhersehbar ist. Schließlich wurde das integrierte System ausgiebig in einer simulierten Krankenhausumgebung mit drei verschiedenen Robotern getestet. Die Beiträge dieser Arbeit sind ein hierarchischer Planer, der ILIR-Planer zur Erstellung von Roadmaps und die Integration dieser Ansätze in den weit verbreiteten Nav2-Stack für ROS 2 Foxy.
 }

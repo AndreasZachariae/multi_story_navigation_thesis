@@ -23,17 +23,17 @@ The result of this work are the straight path planner ILIR, the hierarchical pla
 \section{Comparison of Straight Path Planners}
 \label{sec:evaluation_straight_path}
 %% ==============================
-The evaluation of the planner algorithm ILIR is done on the benchmark maps from Ryu \cite{ryu_hierarchical_2020} and Hou \cite{hou_straight_2021}. And to specifically show the effects of the disturbance of public space, the second room of the first map and the ninth room of the second map were chosen. The metrics and the calculation of path numbers were presented in Chapter \ref{sec:methods} but for better readability a complete list is repeated here:
+The evaluation of the planner algorithm ILIR is done on the benchmark maps from Ryu \cite{ryu_hierarchical_2020} and Hou et al. \cite{hou_straight_2021}. And to specifically show the effects of the disturbance of public space, the second room of the first map and the ninth room of the second map were chosen. The metrics and the calculation of path numbers were presented in Chapter \ref{sec:methods} but for better readability a complete list is repeated here:
 
 \begin{enumerate}
-  \item \textbf{Success rate}: Percentage of valid paths found
-  \item \textbf{Path length}: Total length from start to goal in pixels
-  \item \textbf{Planning time}: Total time for planning including smoothing
-  \item \textbf{Path smoothness}: Sum of deviation angles divided by path length
-  \item \textbf{Obstacle clearance}: Mean distance from path to obstacles
-  \item \textbf{Distance deviation}: Standard deviation of the distance between path and obstacle
-  \item \textbf{Distance to centroid}: Mean distance from path to centroid of the room
-  \item \textbf{Disturbance of public space}: Largest open area inside roadmap divided by total room area (Details in Chapter \ref{sec:new_metric})
+    \item \textbf{Success Rate}: Percentage of valid paths found
+    \item \textbf{Path Length}: Total length from start to goal in pixels
+    \item \textbf{Planning Time}: Total planning time including smoothing
+    \item \textbf{Path Smoothness}: Sum of deviation angles divided by path length
+    \item \textbf{Obstacle Clearance}: Mean distance from path to obstacles
+    \item \textbf{Distance Deviation}: Standard deviation of distance between path and obstacles
+    \item \textbf{Distance to Centroid}: Mean distance of the path to the centroid of the room
+    \item \textbf{Disturbance of Public Space}: Largest open area within the map divided by total room area (details in Chapter \ref{sec:new_metric})
 \end{enumerate}
 
 The different planner which are compared to the ILIR algorithm are listed below. These planners were chosen because they are widely used in the field of path planning for robotics and provide a good baseline to compare to. Additionally the A* can bee seen as a ground truth for the shortest path distance as it is complete and optimal. The other two represent a very different approach of probabilistic sampling.
@@ -93,28 +93,27 @@ The first step for a fair comparison is to smooth the output path of each planne
 
 In Figure \ref{fig:ryu_room2_comparison} the comparison of smoothed paths on the second room of the first benchmark map is shown. It can be clearly seen, that the ILIR planner forces the paths onto its roadmap and keeps clear of the inner area. In the graphics the metric for disturbance of public space is visually represented by the colors of the background. the turquoise area is the largest free area where no path is crossing and the remaining area is yellow. The calculation of this metric is explained in Chapter \ref{sec:methods} with the formula \ref{equ:disturbance}.
 
-\todo{update ryu results with distance to centroid}
 \begin{table}[ht]
 \centering
 \begin{tabular}{lc|cccc}
 \hline
 \textbf{Metric} & \textbf{Unit} & \textbf{ILIR} & \textbf{A*} & \textbf{PRM} & \textbf{RRT} \\
 \hline
-Success rate & - & 1.00 & 1.00 & 1.00 & 1.00 \\
-Mean planning time & s & 0.17 & 1.04 & 0.93 & \textbf{0.02} \\
-Mean path length & px & 187.92 & \textbf{119.11} & 137.62 & 132.60 \\
-Mean smoothness & °/px & 2.37 & \textbf{0.29} & 0.39 & 0.36 \\
-Mean obstacle clearance & px & \textbf{16.74} & 22.62 & 25.62 & 25.51 \\
-Obstacle clearance std & px & \textbf{3.28} & 4.80 & 4.30 & 4.39 \\
-Mean distance to centroid & px & - & - & - & - \\
-Disturbance of public space & - & \textbf{0.53} & 0.70 & 0.67 & 0.67 \\
+Success rate & -                & \textbf{1.000}          & \textbf{1.000}          & \textbf{1.000}      & 0.987 \\
+Mean planning time & s          & \textbf{0.002} & 1.094         & 0.879     & 0.014 \\
+Mean path length & px           & 204.4          & \textbf{118.8} & 136.3    & 131.5 \\
+Mean smoothness & °/px          & 1.296         & \textbf{0.203} & 0.241    & 0.214 \\
+Mean obstacle clearance & px    & \textbf{14.4} & 22.5          & 25.4      & 25.4 \\
+Std obstacle clearance & px     & \textbf{4.1}  & 5.9           & 5.7       & 5.9 \\
+Mean distance to centroid & px  & \textbf{70.0}          & 56.6          & 57.7      & 56.3 \\
+Disturbance of public space & - & \textbf{0.443} & 0.698          & 0.663      & 0.664 \\
 \hline
 \end{tabular}
 \caption{Comparison of planning methods on room 2 of benchmark map 1 with 78 paths}
 \label{tab:room2_results}
 \end{table}
 
-In Table \ref{tab:room2_results} the results of the evaluation can be seen for each planner. The room 2 represents an average room which could appear on most floor in a office environment. It is only about ~8x6 m large. But already in this small room, the differences between the planners are visible. Due to its probabalistic nature and early check for a valid path before the complete roadmap is built, the RRT is the fastest with 0,02 s followed directly by ILIR with 0,17 s. In terms of path lenght, as expected, the A* Planner gives the shortest path and ILIR has the longest as it leaves out the middle area. The smoothness is a factor which is surprisingly bad for the ILIR with 2,37 °/px. It was expected, that with forcing straight paths the resulting path would be smoother. But this is a deceptive conclusion as it has more 90° turns than the others. This sums up to a large total turn angle and can not be compensated through the longer path. The obstacle clearance of ILIR is low which is not necessarily a bad thing as it shows that the paths are more closer to the wall. With the standard deviation of this distance it can be shown that these paths are also more consistent than the others. The metric of the distance to the centroid of the room also shows that the paths of ILIR are not going directly through the middel. This means the paths are close to the walls and generally less fluctuating than the paths from the other planners. Finally the custom metric for the disturbance of the room space shows that ILIR has the lowest disturbance with 0.53. This proves that the ILIR planner achieves its goal of planning paths that are straight and do not disturb the human working area even in a small room. Also in the Figure \ref{fig:ryu_room2_comparison} it can be well seen that the paths are deterministic and always follow the same roadmap. This makes them more predictable for human.
+In Table \ref{tab:room2_results} the results of the evaluation can be seen for each planner. The room 2 represents an average room which could appear on most floor in a office environment. It is only about ~8x6 m large. But already in this small room, the differences between the planners are visible. Due to its probabalistic nature and early check for a valid path before the complete roadmap is built, the ILIR is the fastest with 2 ms followed by RRT with 14 ms. This is an 86 \% improvement. Note that the time for roadmap creation of the ILIR is done one cduring room segmentation and is not counted in here. In terms of path length, as expected, the A* Planner gives the shortest path and ILIR has the longest as it leaves out the middle area. The smoothness is a factor which is surprisingly bad for the ILIR with 2,37 °/px. It was expected, that with forcing straight paths the resulting path would be smoother. But this is a wrong conclusion as it has more 90° turns than the others. This sums up to a large total turn angle and can not be compensated through the longer path. The obstacle clearance of ILIR is low which is not necessarily a bad thing as it shows that the paths are more closer to the wall. With the standard deviation of this distance it can be shown that these paths are also more consistent than the others. The metric of the distance to the centroid of the room also shows that the paths of ILIR are not going directly through the middel. This means the paths are close to the walls and generally less fluctuating than the paths from the other planners. Finally the custom metric for the disturbance of the room space shows that ILIR has the lowest disturbance with 0.443 and therefor is 22 \%-points better than the next best. This proves that the ILIR planner achieves its goal of planning paths that are straight and do not disturb the human working area even in a small room. Also in the Figure \ref{fig:ryu_room2_comparison} it can be well seen that the paths are deterministic and always follow the same roadmap. This makes them more predictable for human.
 
 \begin{figure}[h]
     \captionsetup[subfigure]{justification=centering}
@@ -143,7 +142,6 @@ In Table \ref{tab:room2_results} the results of the evaluation can be seen for e
     \label{fig:hou_room9_comparison}
 \end{figure}
 
-\todo{update hou2 results with distance to centroid}
 \begin{table}[h]
 \centering
 \caption{Planner Metrics}
@@ -152,24 +150,23 @@ In Table \ref{tab:room2_results} the results of the evaluation can be seen for e
 \hline
 \textbf{Metric}                    & \textbf{Unit} & \textbf{ILIR} & \textbf{AStar} & \textbf{PRM} & \textbf{RRT} \\
 \hline
-Success Rate                       & -             & 0.80          & \textbf{1.00}           & 0.63         & 0.95         \\
-Planning Time                      & s             & \textbf{0.22}          & 8.09           & 0.95         & 0.78         \\
-Mean Path Length                   & px            & 471.56        & 265.56         & \textbf{261.26}       & 300.90       \\
-Mean Smoothness                    & °/px          & 1.22          & 0.26           & \textbf{0.19}         & 0.26         \\
-Mean Obstacle Clearance            & px            & \textbf{17.55}        & 44.85          & 54.01        & 52.39        \\
-Obstacle Clearance Std Dev         & px            & \textbf{6.60}          & 19.81          & 17.83        & 16.01        \\
-Mean Distance to Centroid          & px            & -             & -              & -            & -            \\
-Disturbance of Public Space        & -             & \textbf{0.20}          & 0.95           & 0.89         & 0.91         \\
+Success rate                       & -    & \textbf{1.000}          & \textbf{1.000}         & 0.632          & 0.942 \\
+Mean planning time                 & s    & \textbf{0.141} & 8.077         & 0.962          & 0.783 \\
+Mean path length                   & px   & 496.3          & \textbf{256.8}& 262.0          & 304.6 \\
+Mean smoothness                    & °/px & 1.374          & 0.248         & \textbf{0.205} & 0.245 \\
+Mean obstacle clearance            & px   & \textbf{15.2}  & 45.0          & 53.5           & 53.1  \\
+Std obstacle clearance             & px   & \textbf{9.1}   & 17.6          & 18.0           & 19.9 \\
+Mean distance to centroid          & px   & \textbf{175.7}          & 134.6         & 126.3          & 128.9  \\
+Disturbance of public space        & -    & \textbf{0.166} & 0.951         & 0.921          & 0.887 \\
 \hline
 \end{tabular}
 \caption{Comparison of planning methods on room 9 of benchmark map 2 with 171 paths}
 \end{table}
 
-For comparison these same metrics are now applied to a conference lobby which is much larger (~30x50 m) and has more entrances. In Figure \ref{fig:hou_room9_comparison} this room is shown. The corresponding result of the evaluation is displayed in Table \ref{tab:room9_results}. In this case the ILIR planner is even the fastest in terms of planning time with 0,22 s per path. The mean obstacle clearance, its standard deviation and the distance to the centroid show again that the paths of ILIR are closer to the walls and less fluctuating. The difference in disturbance of public space is even bigger and with only 20 percent of the room area occupied by potential paths of the robot it leaves enough space for human activities. 
+For comparison these same metrics are now applied to a conference lobby which is much larger (~30x50 m) and has more entrances. In Figure \ref{fig:hou_room9_comparison} this room is shown. The corresponding result of the evaluation is displayed in Table \ref{tab:room9_results}. For this benchmark, the ILIR planner is the fastest in terms of planning time with 0,141 s per path. The mean obstacle clearance, its standard deviation and the distance to the centroid show again that the paths of ILIR are closer to the walls and less fluctuating. The difference in disturbance of public space is even bigger and with over 72 \%-points and a total of 16 \% of the room area occupied by potential paths of the robot, it leaves enough space for human activities. 
 
 In the previous evaluation some rooms were highlighted to demonstrate the capabilities of the planners on an average map as well as for an extreme case. But of course most distances the robot is driving are through corridors. Especially there the goal property of straight paths are important to avoid collisions with humans and to establish a predictable behavior. For this reason the focus of the following evaluation is on the straight paths and general appearance and not on the path-specific metrics. 
 
-\todo{update hou2 roadmap}
 \begin{figure}[h]
     \captionsetup[subfigure]{justification=centering}
     \centering
@@ -203,9 +200,24 @@ In Figure \ref{fig:hou_comparison} the complete benchmark map 2 is shown and the
 \section{Comparison of Hierarchical Planners}
 \label{sec:evaluation_hierarchical}
 %% ==============================
-The hierarchical planner has to be compared with other implementations from related work and on a set of benchmark that is comparable. As no such common set of benchmarks exist and the planners from related work are not open-source, this evaluation is only done as a proof-of-concept. However the SIRRT* algorithm from Ryu \cite{ryu_hierarchical_2020} uses the same benchmark map 1 and also implements a hierarchical planner. In Figure \ref{} a comparison between SIRRT* and the proposed hierarchical planner combined with the roadmap from ILIR can be seen. Note that the SIRRT* planner is limited to two levels of hierarchy as its focus is only in improving the calculation speed for paths in huge floors. 
+The hierarchical planner has to be compared with other implementations from related work and on a set of benchmark that is comparable. As no such common set of benchmarks exist and the planners from related work are not open-source, this evaluation is only done as a proof-of-concept. However the SIRRT* algorithm from Ryu \cite{ryu_hierarchical_2020} uses the same benchmark map 1 and also implements a hierarchical planner. In Figure \ref{fig:ryu_floor_comparison} a comparison between SIRRT* and the proposed hierarchical planner combined with the roadmap from ILIR can be seen. Note that the SIRRT* planner is limited to two levels of hierarchy as its focus is only in improving the calculation speed for paths in huge floors. 
 
-\todo{Figure for ryu path from 10 to 7 compared with ilir path same rooms}
+\begin{figure}[h]
+    \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{subfigure}{0.75\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/60_results/ryu_example_path_htm.png}
+      \caption{HTM}
+    \end{subfigure}
+    \begin{subfigure}{0.75\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/60_results/ryu_example_path_ilir.png}
+      \caption{ILIR}
+    \end{subfigure}
+    \caption[Comparison of hierarchical planning on benchmark map 1]{Comparison of hierarchical planning on benchmark map 1}
+    \label{fig:ryu_floor_comparison}
+\end{figure}
 
 The proposed hierarchical planner (b) uses the H-Graph to efficiently plan first on room level and then only searches the corresponding roadmaps of these rooms. As these roadmaps can be precalculated a new search can be done very quickly. In comparison, the SIRRT* does an RRT search on each room for every path. This could also be sped up by caching the roadmap but is not described in \cite{ryu_hierarchical_2020}. The problem of choosing the correct room door for connections where two or more doors lead to the same room, is solved by both planners. This can be seen in (a) between room 16 and room 10. As well as in (b) on the same rooms. The shortest path inside room 16 would be to connect to the first door on the left but this would lead to an overall longer path. 
 
@@ -238,7 +250,6 @@ Disturbance of public space & - & \textbf{0.53} \\
 %% ==============================
 To validate the developed concept, it is tested in a simulated hospital environment. The environment was previously presented in Figure \ref{fig:aws_hospital} in Chapter \ref{sec:simulation}. Amazon made their "AWS RoboMaker Hospital World" \cite{aws_robotics_aws_2023} open-source available but did not publish any research done with it. This means it was not possible to compare this approach with with related work in the area of multi-floor navigation on the same environment. However there is one work from Fredriksson et al. \cite{fredriksson_semantic_2023} which uses the same hospital simulation from Amazon but focus on detecting semantic features like intersections and corridors. It has also the aim of providing a clean roadmap for global navigation of the robot. In Figure \ref{fig:aws_comparison} a comparison of this approach and the resulting roadmap with the proposed planner and other related work like EVG and RGVG is shown.
 
-\todo{update aws ilir roadmap}
 \begin{figure}[h]
     \captionsetup[subfigure]{justification=centering}
     \centering
@@ -259,7 +270,7 @@ To validate the developed concept, it is tested in a simulated hospital environm
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{figures/60_results/aws_roadmap_semantic.png}
+      \includegraphics[width=\textwidth]{figures/60_results/aws_roadmap_horizontal.png}\vspace{5pt}
       \caption{ILIR}
     \end{subfigure}
     \caption[Comparison of planning methods for the hospital simulation]{Comparison of planning methods for the hospital simulation. For (c) semantic features are colored: Green for pathways, brown for intersections, blue dead ends and pink paths to a new frontier. In (d) the segmented rooms are colored with an increasing color palette, the roadmap is yellow.}
